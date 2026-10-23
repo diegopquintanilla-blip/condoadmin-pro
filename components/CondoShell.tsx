@@ -8,7 +8,6 @@ const nav=[
 {section:'Edificio',items:[['Bloques inmobiliarios','/modulos/bloques-inmobiliarios',Building2],['Residentes','/residentes',Users],['Mascotas','/modulos/mascotas',PawPrint],['Etapas','/etapas',Layers3],['Torres','/modulos/torres',Landmark],['Inmuebles','/modulos/inmuebles',House],['Estacionamientos','/modulos/estacionamientos',CarFront],['Vehículos','/modulos/vehiculos',Bike],['Depósitos','/modulos/depositos',Archive],['Personal','/modulos/personal',IdCard],['Control de acceso','/modulos/control-acceso',ShieldCheck],['Mensajería','/modulos/mensajeria',Mail]]},
 {section:'Operaciones',items:[['Servicios','/modulos/servicios',Boxes],['Finanzas','/modulos/finanzas',Wallet],['Áreas comunes','/modulos/areas-comunes',Gamepad2],['Mantenimientos','/modulos/mantenimientos',Wrench],['Comunicación','/modulos/comunicacion',MessagesSquare],['Visor de eventos','/modulos/visor-de-eventos',CalendarDays],['Votaciones','/modulos/votaciones',Vote],['Reportes','/modulos/reportes',ChartColumn],['Guías y tutoriales','/modulos/guias-y-tutoriales',BookOpen],['Configuración','/configuracion-inicial',Settings]]}
 ] as const
-export const moduleNames=nav.flatMap(group=>group.items).filter(item=>item[1].startsWith('/modulos/')).map(item=>({slug:item[1].split('/').pop()!,name:item[0]}))
 export function CondoShell({children}:{children:ReactNode}){
  const pathname=usePathname();const [open,setOpen]=useState(false)
  const inside=['/dashboard','/residentes','/etapas','/configuracion-inicial','/modulos'].some(p=>pathname===p||pathname.startsWith(p+'/'))
