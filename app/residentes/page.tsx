@@ -998,3 +998,55 @@ function SelectField({
   options,
 }: {
   label: string
+  value: string
+  onChange: (value: string) => void
+  options: Array<{ label: string; value: string }>
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-foreground">
+        {label}
+      </label>
+
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+      >
+        {options.map((option) => (
+          <option key={`${option.value}-${option.label}`} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
+function TextAreaField({
+  label,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string
+  value: string
+  onChange: (value: string) => void
+  placeholder: string
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-semibold text-foreground">
+        {label}
+      </label>
+
+      <textarea
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        rows={4}
+        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+      />
+    </div>
+  )
+}
