@@ -1,0 +1,1 @@
+import type {ButtonHTMLAttributes} from "react";type Props=ButtonHTMLAttributes<HTMLButtonElement>&{variant?:string;size?:string};export function Button({variant,size,className="",...props}:Props){return <button {...props} className={"inline-flex items-center justify-center rounded-lg border px-4 py-2 disabled:opacity-50 "+className}/>}
