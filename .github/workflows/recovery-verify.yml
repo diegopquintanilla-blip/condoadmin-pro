@@ -1,0 +1,28 @@
+name: CondoAdmin recovery validation
+on:
+  workflow_dispatch:
+    inputs:
+      recovery_ref:
+        description: 'Branch to validate'
+        required: true
+        default: 'recovery/condoadmin-v2'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.recovery_ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: placeholder-for-build-only
