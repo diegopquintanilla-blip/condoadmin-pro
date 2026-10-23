@@ -1,5 +1,10 @@
 name: CondoAdmin recovery validation
 on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/recovery-verify.yml']
+  pull_request:
+    branches: [main]
   workflow_dispatch:
     inputs:
       recovery_ref:
@@ -14,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.recovery_ref }}
+          ref: recovery/condoadmin-v2
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
