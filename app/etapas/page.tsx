@@ -10,7 +10,7 @@ import {
   Eye,
   Layers3,
   Loader2,
-  Map,
+  Map as MapIcon,
   Plus,
   Search,
   Trash2,
@@ -238,7 +238,7 @@ export default function EtapasPage() {
         <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
           <div>
             <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-              <Map className="h-4 w-4" />
+              <MapIcon className="h-4 w-4" />
               Organización territorial del condominio
             </div>
 
@@ -735,7 +735,7 @@ function EmptyState({
   return (
     <section className="rounded-2xl border border-border/60 bg-card p-10 text-center shadow-sm">
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary text-primary">
-        <Map className="h-8 w-8" />
+        <MapIcon className="h-8 w-8" />
       </div>
 
       <h2 className="text-xl font-bold text-foreground">{title}</h2>
