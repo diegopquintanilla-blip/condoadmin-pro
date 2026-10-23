@@ -1,9 +1,9 @@
 name: Recovery validation
 on:
   push:
-    branches: ['recovery/**']
-  pull_request:
-    branches: [main]
+    branches:
+      - 'recovery/**'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
