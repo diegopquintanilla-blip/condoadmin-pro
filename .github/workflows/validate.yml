@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - 'recovery/**'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,8 +17,10 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-audit --no-fund
-      - run: npm run typecheck
-      - run: npm run build
+      - name: Verify TypeScript
+        run: npm run typecheck
+      - name: Build Next.js
+        run: npm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: placeholder-for-build-only
