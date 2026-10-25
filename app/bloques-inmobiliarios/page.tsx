@@ -3,6 +3,7 @@ import {redirect} from 'next/navigation'
 import {Building2,House,Layers3,ArrowLeft} from 'lucide-react'
 import {createSupabaseServerClient} from '@/lib/supabase/server'
 import {CrearInmueble} from '@/components/inmuebles/CrearInmueble'
+import {InventarioEditable} from '@/components/inmuebles/InventarioEditable'
 export default async function BloquesPage(){
  const client=await createSupabaseServerClient()
  const {data:{user}}=await client.auth.getUser()
@@ -11,7 +12,7 @@ export default async function BloquesPage(){
  const ids=(memberships??[]).map(x=>String(x.condominio_id))
  if(membershipError)return <main role="alert" className="rounded-xl bg-red-50 p-6 text-red-800">No fue posible verificar tus permisos.</main>
  const [{data:properties,error:propertiesError},{data:stages,error:stagesError}]=ids.length?await Promise.all([
-  client.from('inmuebles').select('id,codigo,tipo,etapa,torre,bloque,estado').in('condominio_id',ids).order('codigo').limit(500),
+  client.from('inmuebles').select('id,condominio_id,codigo,tipo,etapa,torre,bloque,estado').in('condominio_id',ids).order('codigo').limit(500),
   client.from('etapas').select('id,nombre,tipo').in('condominio_id',ids).order('nombre').limit(500)
  ]):[{data:[],error:null},{data:[],error:null}]
  const items=properties??[]
@@ -31,6 +32,6 @@ export default async function BloquesPage(){
   </div>
   {items.length===500?<p className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm">Se muestran los primeros 500 inmuebles. El listado no representa necesariamente el total.</p>:null}
   <section className="rounded-2xl border bg-white p-6 shadow-sm"><h2 className="text-xl font-bold">Distribución por bloque</h2>{groups.size?<div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from(groups).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,count])=><div key={name} className="rounded-xl border bg-slate-50 p-4"><p className="font-semibold">{name}</p><p className="mt-1 text-sm text-slate-500">{count} inmueble(s)</p></div>)}</div>:<p className="mt-5 text-sm text-slate-500">No hay inmuebles registrados. Los bloques aparecerán a medida que se registren.</p>}</section>
-  <section className="overflow-hidden rounded-2xl border bg-white shadow-sm"><h2 className="p-6 text-xl font-bold">Inventario de inmuebles</h2><div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="bg-slate-50 text-slate-600"><tr><th className="p-4">Código</th><th className="p-4">Tipo</th><th className="p-4">Etapa</th><th className="p-4">Torre</th><th className="p-4">Bloque</th><th className="p-4">Estado</th></tr></thead><tbody>{items.map(item=><tr key={item.id} className="border-t"><td className="p-4 font-semibold">{item.codigo}</td><td className="p-4">{item.tipo}</td><td className="p-4">{item.etapa||'—'}</td><td className="p-4">{item.torre||'—'}</td><td className="p-4">{item.bloque||'—'}</td><td className="p-4">{item.estado}</td></tr>)}</tbody></table></div>{!items.length?<p className="px-6 pb-6 text-sm text-slate-500">Sin inmuebles para mostrar.</p>:null}</section>
+  <InventarioEditable items={items.map(x=>({...x,codigo:String(x.codigo),tipo:String(x.tipo),estado:String(x.estado)}))} memberships={(memberships??[]).map(x=>({condominio_id:String(x.condominio_id),role:String(x.role)}))}/>
  </main>
 }
