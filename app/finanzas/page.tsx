@@ -3,6 +3,7 @@ import Link from 'next/link'
 import {createSupabaseServerClient} from '@/lib/supabase/server'
 import {Wallet,Receipt,Landmark,ArrowLeft} from 'lucide-react'
 import {FinanzasConfiguracion} from '@/components/finanzas/FinanzasConfiguracion'
+import {EmitirRecibo} from '@/components/finanzas/EmitirRecibo'
 const money=(n:number)=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN'}).format(n)
 export default async function FinanzasPage({searchParams}:{searchParams:Promise<{condominio?:string}>}){
  const db=await createSupabaseServerClient()
@@ -20,7 +21,9 @@ export default async function FinanzasPage({searchParams}:{searchParams:Promise<
   db.from('pagos').select('id,monto,fecha_pago,estado,metodo,numero_operacion',{count:'exact'}).eq('condominio_id',current).order('created_at',{ascending:false}).limit(50),
   db.from('finanzas_config').select('mantenimiento_base,mora_base,dia_corte,dia_vencimiento,permitir_pagos_adelantados,generar_recibos_auto').eq('condominio_id',current).maybeSingle()
  ]):[{data:[],error:null,count:0},{data:[],error:null,count:0},{data:null,error:null}]
- const hasError=Boolean(receipts.error||payments.error||config.error)
+ const {data:properties,error:propertiesError}=current?await db.from('inmuebles').select('id,codigo').eq('condominio_id',current).order('codigo').limit(100):{data:[],error:null}
+ const canEdit=Boolean(current&&(members??[]).some(m=>m.condominio_id===current&&['super_admin','admin','junta'].includes(String(m.role))))
+ const hasError=Boolean(receipts.error||payments.error||config.error||propertiesError)
  const r=receipts.data??[],p=payments.data??[]
  const owed=r.filter(x=>['pendiente','emitido','vencido'].includes(String(x.estado))).reduce((s,x)=>s+Number(x.total||0),0)
  const validated=p.filter(x=>x.estado==='validado').reduce((s,x)=>s+Number(x.monto||0),0)
@@ -31,6 +34,7 @@ export default async function FinanzasPage({searchParams}:{searchParams:Promise<
   {hasError?<p role="alert" className="rounded-xl bg-red-50 p-5 text-red-800">Error al consultar datos financieros. No se muestran datos estimados.</p>:null}
   <div className="grid gap-4 md:grid-cols-3">{[{name:'Recibos consultados',value:String(receipts.count??0),Icon:Receipt},{name:'Pendiente en los últimos 50 recibos',value:money(owed),Icon:Wallet},{name:'Validado en los últimos 50 pagos',value:money(validated),Icon:Landmark}].map(({name,value,Icon})=><div key={name} className="rounded-2xl border bg-white p-6 shadow-sm"><Icon className="text-sky-700"/><p className="mt-4 text-sm text-slate-500">{name}</p><strong className="mt-2 block text-2xl">{current&&!hasError?value:'—'}</strong></div>)}</div>
   {current&&!config.error?<FinanzasConfiguracion key={current} condominioId={current} initial={config.data} canEdit={(members??[]).some(m=>m.condominio_id===current&&['super_admin','admin','junta'].includes(String(m.role)))}/>:null}
+  {current&&!propertiesError?<EmitirRecibo key={current} condominioId={current} properties={(properties??[]).map(x=>({id:String(x.id),codigo:String(x.codigo)}))} canEdit={canEdit}/>:null}
   <section className="rounded-2xl border bg-white p-6 shadow-sm"><h2 className="text-lg font-bold">Configuración financiera vigente</h2>{config.data?<div className="mt-4 grid gap-3 text-sm sm:grid-cols-2"><p>Mantenimiento base: <strong>{money(Number(config.data.mantenimiento_base||0))}</strong></p><p>Mora base: <strong>{money(Number(config.data.mora_base||0))}</strong></p><p>Día de corte: <strong>{config.data.dia_corte??'—'}</strong></p><p>Día de vencimiento: <strong>{config.data.dia_vencimiento??'—'}</strong></p></div>:<p className="mt-3 text-sm text-slate-500">Sin configuración financiera registrada.</p>}</section>
   <section className="overflow-hidden rounded-2xl border bg-white shadow-sm"><h2 className="p-6 text-lg font-bold">Últimos recibos</h2><div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="bg-slate-50"><tr>{['Código','Periodo','Vencimiento','Estado','Total'].map(x=><th className="p-4" key={x}>{x}</th>)}</tr></thead><tbody>{r.map(x=><tr className="border-t" key={x.id}><td className="p-4">{x.codigo}</td><td className="p-4">{x.periodo}</td><td className="p-4">{x.fecha_vencimiento??'—'}</td><td className="p-4">{x.estado}</td><td className="p-4">{money(Number(x.total||0))}</td></tr>)}</tbody></table></div>{!r.length?<p className="p-6 text-sm text-slate-500">No hay recibos registrados.</p>:null}</section>
   <section className="overflow-hidden rounded-2xl border bg-white shadow-sm"><h2 className="p-6 text-lg font-bold">Últimos pagos</h2><div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="bg-slate-50"><tr>{['Fecha','Método','Operación','Estado','Monto'].map(x=><th className="p-4" key={x}>{x}</th>)}</tr></thead><tbody>{p.map(x=><tr className="border-t" key={x.id}><td className="p-4">{x.fecha_pago??'—'}</td><td className="p-4">{x.metodo}</td><td className="p-4">{x.numero_operacion??'—'}</td><td className="p-4">{x.estado}</td><td className="p-4">{money(Number(x.monto||0))}</td></tr>)}</tbody></table></div>{!p.length?<p className="p-6 text-sm text-slate-500">No hay pagos registrados.</p>:null}</section>
