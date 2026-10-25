@@ -2,11 +2,12 @@ import Link from 'next/link'
 import {redirect} from 'next/navigation'
 import {Building2,House,Layers3,ArrowLeft} from 'lucide-react'
 import {createSupabaseServerClient} from '@/lib/supabase/server'
+import {CrearInmueble} from '@/components/inmuebles/CrearInmueble'
 export default async function BloquesPage(){
  const client=await createSupabaseServerClient()
  const {data:{user}}=await client.auth.getUser()
  if(!user)redirect('/login')
- const {data:memberships,error:membershipError}=await client.from('condominio_usuarios').select('condominio_id').eq('user_id',user.id).eq('is_active',true)
+ const {data:memberships,error:membershipError}=await client.from('condominio_usuarios').select('condominio_id,role').eq('user_id',user.id).eq('is_active',true)
  const ids=(memberships??[]).map(x=>String(x.condominio_id))
  if(membershipError)return <main role="alert" className="rounded-xl bg-red-50 p-6 text-red-800">No fue posible verificar tus permisos.</main>
  const [{data:properties,error:propertiesError},{data:stages,error:stagesError}]=ids.length?await Promise.all([
@@ -24,6 +25,7 @@ export default async function BloquesPage(){
   </section>
   {!ids.length?<section className="rounded-2xl border border-amber-200 bg-amber-50 p-6"><h2 className="font-bold">Primero registra un condominio</h2><p className="mt-2 text-sm">Para consultar inmuebles necesitas una membresía activa.</p><Link className="mt-4 inline-block rounded-lg bg-sky-800 px-4 py-2 text-white" href="/configuracion-inicial">Configurar condominio</Link></section>:null}
   {propertiesError||stagesError?<p role="alert" className="rounded-xl bg-red-50 p-5 text-red-800">No se pudo consultar el inventario autorizado.</p>:null}
+  <CrearInmueble memberships={(memberships??[]).map(x=>({condominio_id:String(x.condominio_id),role:String(x.role)}))}/>
   <div className="grid gap-4 sm:grid-cols-3">
    {[{name:'Inmuebles consultados',value:items.length,Icon:House},{name:'Bloques identificados',value:groups.size,Icon:Building2},{name:'Etapas registradas',value:stages?.length??0,Icon:Layers3}].map(({name,value,Icon})=><div key={name} className="rounded-2xl border bg-white p-6 shadow-sm"><Icon className="text-sky-700"/><p className="mt-4 text-sm text-slate-500">{name}</p><p className="mt-1 text-3xl font-extrabold">{value}</p></div>)}
   </div>
