@@ -23,7 +23,7 @@ export function InventarioEditable({items,memberships,residents=[],serverMode=fa
  const [notice,setNotice]=useState('')
  const writable=new Set(memberships.filter(x=>['admin','super_admin','junta'].includes(x.role)).map(x=>x.condominio_id))
  const deletable=new Set(memberships.filter(x=>['admin','super_admin'].includes(x.role)).map(x=>x.condominio_id))
- const visible=useMemo(()=>(serverMode?items:items.filter(x=>(!stage||x.etapa===stage)&&(!block||x.bloque===block)&&[x.codigo,x.tipo,x.etapa,x.torre,x.bloque].some(y=>(y??'').toLowerCase().includes(search.toLowerCase().trim()))),[items,search,stage,block,serverMode])
+ const visible=useMemo(()=>serverMode?items:items.filter(x=>(!stage||x.etapa===stage)&&(!block||x.bloque===block)&&[x.codigo,x.tipo,x.etapa,x.torre,x.bloque].some(y=>(y??'').toLowerCase().includes(search.toLowerCase().trim()))),[items,search,stage,block,serverMode])
  const pageCount=Math.max(1,Math.ceil(visible.length/pageSize))
  const currentPage=Math.min(page,pageCount)
  const paged=serverMode?visible:visible.slice((currentPage-1)*pageSize,currentPage*pageSize)
