@@ -9,7 +9,7 @@ const stats=[
 {key:'pagos_validados_mes',label:'Pagos validados del mes',Icon:CheckCircle2,tone:'bg-emerald-50 text-emerald-700'},
 {key:'incidencias_abiertas',label:'Incidencias abiertas',Icon:AlertTriangle,tone:'bg-orange-50 text-orange-700'}
 ] as const
-const shortcuts=[{name:'Bloques inmobiliarios',href:'/bloques-inmobiliarios',Icon:Building2},{name:'Residentes',href:'/residentes',Icon:Users},{name:'Etapas',href:'/etapas',Icon:Layers3},{name:'Tareas',href:'/modulos/tareas',Icon:ClipboardList},{name:'Finanzas',href:'/modulos/finanzas',Icon:Wallet},{name:'Reportes',href:'/modulos/reportes',Icon:ChartColumn}]
+const shortcuts=[{name:'Bloques inmobiliarios',href:'/bloques-inmobiliarios',Icon:Building2},{name:'Residentes',href:'/residentes',Icon:Users},{name:'Etapas',href:'/etapas',Icon:Layers3},{name:'Tareas',href:'/modulos/tareas',Icon:ClipboardList},{name:'Finanzas',href:'/finanzas',Icon:Wallet},{name:'Reportes',href:'/modulos/reportes',Icon:ChartColumn}]
 function val(value:unknown,configured:boolean){if(!configured)return '—';if(value===null||value===undefined)return '—';return typeof value==='number'?value.toLocaleString('es-PE'):String(value)}
 export function ExecutiveDashboard({overview={},history=[],configured=true}:Props){
  return <div className="space-y-7">
