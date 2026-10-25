@@ -15,6 +15,7 @@ export default async function BloquesPage(){
   client.from('inmuebles').select('id,condominio_id,codigo,tipo,etapa,torre,bloque,estado').in('condominio_id',ids).order('codigo').limit(500),
   client.from('etapas').select('id,nombre,tipo').in('condominio_id',ids).order('nombre').limit(500)
  ]):[{data:[],error:null},{data:[],error:null}]
+ const {data:residents,error:residentsError}=ids.length?await client.from('residentes').select('id,inmueble_id,full_name,tipo').in('condominio_id',ids).not('inmueble_id','is',null).limit(1000):{data:[],error:null}
  const items=properties??[]
  const groups=new Map<string,number>()
  for(const item of items){const key=String(item.bloque||'Sin bloque asignado');groups.set(key,(groups.get(key)??0)+1)}
@@ -25,13 +26,14 @@ export default async function BloquesPage(){
    <p className="mt-2 text-sm text-sky-100">Inventario real de inmuebles, bloques y etapas de tus condominios autorizados.</p>
   </section>
   {!ids.length?<section className="rounded-2xl border border-amber-200 bg-amber-50 p-6"><h2 className="font-bold">Primero registra un condominio</h2><p className="mt-2 text-sm">Para consultar inmuebles necesitas una membresía activa.</p><Link className="mt-4 inline-block rounded-lg bg-sky-800 px-4 py-2 text-white" href="/configuracion-inicial">Configurar condominio</Link></section>:null}
-  {propertiesError||stagesError?<p role="alert" className="rounded-xl bg-red-50 p-5 text-red-800">No se pudo consultar el inventario autorizado.</p>:null}
+  {propertiesError||stagesError||residentsError?<p role="alert" className="rounded-xl bg-red-50 p-5 text-red-800">No se pudo consultar el inventario autorizado.</p>:null}
   <CrearInmueble memberships={(memberships??[]).map(x=>({condominio_id:String(x.condominio_id),role:String(x.role)}))}/>
   <div className="grid gap-4 sm:grid-cols-3">
    {[{name:'Inmuebles consultados',value:items.length,Icon:House},{name:'Bloques identificados',value:groups.size,Icon:Building2},{name:'Etapas registradas',value:stages?.length??0,Icon:Layers3}].map(({name,value,Icon})=><div key={name} className="rounded-2xl border bg-white p-6 shadow-sm"><Icon className="text-sky-700"/><p className="mt-4 text-sm text-slate-500">{name}</p><p className="mt-1 text-3xl font-extrabold">{value}</p></div>)}
   </div>
   {items.length===500?<p className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm">Se muestran los primeros 500 inmuebles. El listado no representa necesariamente el total.</p>:null}
   <section className="rounded-2xl border bg-white p-6 shadow-sm"><h2 className="text-xl font-bold">Distribución por bloque</h2>{groups.size?<div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from(groups).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,count])=><div key={name} className="rounded-xl border bg-slate-50 p-4"><p className="font-semibold">{name}</p><p className="mt-1 text-sm text-slate-500">{count} inmueble(s)</p></div>)}</div>:<p className="mt-5 text-sm text-slate-500">No hay inmuebles registrados. Los bloques aparecerán a medida que se registren.</p>}</section>
-  <InventarioEditable items={items.map(x=>({...x,codigo:String(x.codigo),tipo:String(x.tipo),estado:String(x.estado)}))} memberships={(memberships??[]).map(x=>({condominio_id:String(x.condominio_id),role:String(x.role)}))}/>
+  {residents?.length===1000?<p className="rounded-lg bg-amber-50 p-3 text-sm">Se muestran hasta 1000 residentes vinculados.</p>:null}
+  <InventarioEditable residents={(residents??[]).map(r=>({id:String(r.id),inmueble_id:r.inmueble_id?String(r.inmueble_id):null,full_name:String(r.full_name),tipo:String(r.tipo)}))} items={items.map(x=>({...x,codigo:String(x.codigo),tipo:String(x.tipo),estado:String(x.estado)}))} memberships={(memberships??[]).map(x=>({condominio_id:String(x.condominio_id),role:String(x.role)}))}/>
  </main>
 }
