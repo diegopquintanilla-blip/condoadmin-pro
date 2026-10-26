@@ -296,7 +296,7 @@ export default function ResidentesPage() {
     // Escape RFC 4180 quotes and prevent spreadsheet formula execution from user-entered text.
     const safeCell = (value: string) => {
       const normalized = String(value ?? '')
-      const escaped = /^[\\s\\u0000-\\u001f]*[=+@-]/.test(normalized) ? "'" + normalized : normalized
+      const escaped = ['=', '+', '-', '@'].includes(normalized.trimStart().charAt(0)) ? "'" + normalized : normalized
       return '"' + escaped.replace(/"/g, '""') + '"'
     }
     const csv = '\uFEFF' + rows.map((row) => row.map(safeCell).join(',')).join('\r\n')
