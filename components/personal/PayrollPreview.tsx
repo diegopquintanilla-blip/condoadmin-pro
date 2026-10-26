@@ -29,7 +29,7 @@ export function PayrollPreview(){
   const tax=withholding&&!suspended&&independentGross>1500?round(independentGross*0.08):0
   return {earned,overtime,gross,less,net,independentGross,tax,independentNet:round(independentGross-tax)}
  },[salary,days,monthlyDays,dayHours,extra25,extra35,bonus,deductions,serviceValue,serviceUnits,withholding,suspended])
- const Field=({label,value,set,step='1'}:{label:string;value:string;set:(v:string)=>void;step?:string})=><label className="text-sm font-semibold text-slate-700">{label}<input type="number" min="0" max="1000000" step={step} value={value} onChange={e=>set(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3"/></label>
+
  return <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Simulador de remuneración y honorarios">
  <div className="flex items-center gap-3"><span className="rounded-xl bg-sky-100 p-3 text-sky-800"><Calculator/></span><div><h2 className="text-xl font-extrabold">Simulador mensual de pagos</h2><p className="text-sm text-slate-500">Calcula importes preliminares sin modificar la base de datos ni efectuar pagos.</p></div></div>
  <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label="Tipo de vínculo">
@@ -45,4 +45,5 @@ export function PayrollPreview(){
  <p className="mt-4 flex items-center gap-2 text-xs text-slate-500"><FileText size={15}/> Vista preliminar sin guardar. No genera boletas oficiales, asientos contables ni transferencias.</p>
  </section>
 }
+function Field({label,value,set,step='1'}:{label:string;value:string;set:(v:string)=>void;step?:string}){return <label className="text-sm font-semibold text-slate-700">{label}<input type="number" min="0" max="1000000" step={step} value={value} onChange={e=>set(e.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3"/></label>}
 function Summary({label,value,featured=false}:{label:string;value:number;featured?:boolean}){return <div className={'rounded-2xl p-4 '+(featured?'bg-sky-900 text-white':'bg-slate-100 text-slate-900')}><p className={'text-xs '+(featured?'text-sky-100':'text-slate-600')}>{label}</p><p className="mt-2 text-xl font-extrabold">{soles(value)}</p></div>}
