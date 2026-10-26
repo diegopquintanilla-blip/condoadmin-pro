@@ -310,7 +310,7 @@ export default function ResidentesPage() {
 
   return (
     <main className="space-y-8">
-      <section className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+      <section className="rounded-[22px] border border-border/60 bg-card p-6 shadow-sm">
         <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
           <div>
             <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
@@ -341,13 +341,13 @@ export default function ResidentesPage() {
       </section>
 
       {errorMessage && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+        <div className="rounded-[22px] border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
           {errorMessage}
         </div>
       )}
 
       {notice && (
-        <div className="rounded-2xl border border-primary/20 bg-primary/10 px-5 py-4 text-sm font-medium text-primary">
+        <div className="rounded-[22px] border border-primary/20 bg-primary/10 px-5 py-4 text-sm font-medium text-primary">
           {notice}
         </div>
       )}
@@ -386,7 +386,7 @@ export default function ResidentesPage() {
         />
       </section>
 
-      <section className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+      <section className="rounded-[22px] border border-border/60 bg-card p-6 shadow-sm">
         <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
           <div className="relative w-full xl:w-[520px]">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -463,7 +463,7 @@ export default function ResidentesPage() {
           onAction={() => setShowModal(true)}
         />
       ) : (
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+        <section className="overflow-hidden rounded-[22px] border border-border/60 bg-card shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1150px]">
               <thead className="border-b border-border bg-secondary">
@@ -822,7 +822,7 @@ function SummaryCard({
   }
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+    <div className="rounded-[22px] border border-border/60 bg-card p-6 shadow-sm">
       <div
         className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${styles[tone]}`}
       >
@@ -850,7 +850,7 @@ function EmptyState({
   disabled?: boolean
 }) {
   return (
-    <section className="rounded-2xl border border-border/60 bg-card p-10 text-center shadow-sm">
+    <section className="rounded-[22px] border border-border/60 bg-card p-10 text-center shadow-sm">
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary text-primary">
         <Users className="h-8 w-8" />
       </div>
@@ -875,7 +875,7 @@ function EmptyState({
 
 function LoadingState() {
   return (
-    <div className="flex items-center justify-center rounded-2xl border border-border/60 bg-card p-12">
+    <div className="flex items-center justify-center rounded-[22px] border border-border/60 bg-card p-12">
       <Loader2 className="mr-2 h-5 w-5 animate-spin text-primary" />
       <span className="text-sm font-medium text-muted-foreground">
         Cargando residentes...
@@ -930,7 +930,7 @@ function ModalLayout({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-border bg-card shadow-2xl">
+      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[22px] border border-border bg-card shadow-2xl">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card p-6">
           <div>
             <h2 className="text-2xl font-bold text-foreground">{title}</h2>
