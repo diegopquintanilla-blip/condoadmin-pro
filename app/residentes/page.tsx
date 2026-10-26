@@ -249,10 +249,20 @@ export default function ResidentesPage() {
     setErrorMessage('')
     setNotice('')
 
-    const { error } = await supabase.from('residentes').delete().eq('id', id)
+    const resident = residentes.find((item) => item.id === id)
+    if (!resident) {
+      setErrorMessage('No se encontró al residente seleccionado.')
+      return
+    }
+    const { data, error } = await supabase.from('residentes').delete().eq('id', id).eq('condominio_id', resident.condominio_id).select('id')
 
     if (error) {
       setErrorMessage(error.message)
+      return
+    }
+    if (!data?.length) {
+      setErrorMessage('No se eliminó el registro. Comprueba tus permisos o actualiza la lista.')
+      await loadData()
       return
     }
 
