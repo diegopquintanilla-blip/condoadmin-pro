@@ -3,7 +3,7 @@ import {useState,type FormEvent} from 'react'
 import {useRouter} from 'next/navigation'
 import {supabase} from '@/lib/supabase/client'
 import {Plus,Loader2} from 'lucide-react'
-type Role={condominio_id:string;role:string}
+type Role={condominio_id:string;role:string;nombre:string}
 const tipos=['lote','casa','departamento','local','estacionamiento','deposito']
 export function CrearInmueble({memberships}:{memberships:Role[]}){
  const router=useRouter()
@@ -28,7 +28,7 @@ export function CrearInmueble({memberships}:{memberships:Role[]}){
   setCodigo('');setBloque('');setEtapa('');setTorre('');setMessage('Inmueble registrado correctamente.');router.refresh()
  }
  return <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><Plus className="text-sky-700"/><div><h2 className="text-xl font-bold">Registrar inmueble</h2><p className="text-sm text-slate-500">Registro real protegido por permisos del condominio</p></div></div><form onSubmit={submit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
- <label className="text-sm font-semibold">Condominio<select className="mt-2 w-full rounded-xl border p-3" value={condominio} onChange={e=>setCondominio(e.target.value)}>{allowed.map(x=><option key={x.condominio_id} value={x.condominio_id}>{x.condominio_id.slice(0,8)}</option>)}</select></label>
+ <label className="text-sm font-semibold">Condominio<select className="mt-2 w-full rounded-xl border p-3" value={condominio} onChange={e=>setCondominio(e.target.value)}>{allowed.map(x=><option key={x.condominio_id} value={x.condominio_id}>{x.nombre}</option>)}</select></label>
  <label className="text-sm font-semibold">Código de inmueble *<input required maxLength={70} value={codigo} onChange={e=>setCodigo(e.target.value)} className="mt-2 w-full rounded-xl border p-3" placeholder="Ej. A-101"/></label>
  <label className="text-sm font-semibold">Tipo<select value={tipo} onChange={e=>setTipo(e.target.value)} className="mt-2 w-full rounded-xl border p-3">{tipos.map(x=><option key={x}>{x}</option>)}</select></label>
  <label className="text-sm font-semibold">Bloque<input maxLength={100} value={bloque} onChange={e=>setBloque(e.target.value)} className="mt-2 w-full rounded-xl border p-3" placeholder="Opcional"/></label>
