@@ -23,9 +23,9 @@ export function CrearInmueble({memberships}:{memberships:Role[]}){
   if(!codigo.trim()||codigo.trim().length>70){setMessage('Ingresa un código válido de hasta 70 caracteres.');return}
   if([bloque,etapa,torre].some(v=>v.trim().length>100)){setMessage('Las ubicaciones deben tener como máximo 100 caracteres.');return}
   setBusy(true)
-  const {error}=await supabase.from('inmuebles').insert({condominio_id:condominio,codigo:codigo.trim(),tipo,bloque:bloque.trim()||null,etapa:etapa.trim()||null,torre:torre.trim()||null})
+  const {data,error}=await supabase.from('inmuebles').insert({condominio_id:condominio,codigo:codigo.trim(),tipo,bloque:bloque.trim()||null,etapa:etapa.trim()||null,torre:torre.trim()||null}).select('id,condominio_id').single()
   setBusy(false)
-  if(error){setMessage(error.code==='23505'?'Ya existe un inmueble con ese código.':'No se pudo registrar el inmueble. Revisa los permisos y el código.');return}
+  if(error||!data||data.condominio_id!==condominio){setMessage(error?.code==='23505'?'Ya existe un inmueble con ese código.':'No se pudo confirmar el registro del inmueble. Revisa los permisos e intenta actualizar la página.');return}
   setCodigo('');setBloque('');setEtapa('');setTorre('');setMessage('Inmueble registrado correctamente.');router.refresh()
  }
  return <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><Plus className="text-sky-700"/><div><h2 className="text-xl font-bold">Registrar inmueble</h2><p className="text-sm text-slate-500">Registro real protegido por permisos del condominio</p></div></div><form onSubmit={submit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
