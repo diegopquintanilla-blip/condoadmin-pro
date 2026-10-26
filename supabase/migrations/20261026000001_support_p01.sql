@@ -16,7 +16,9 @@ create index support_tickets_condo_date on public.support_tickets(condominio_id,
 create index support_tickets_creator_date on public.support_tickets(created_by,created_at desc);
 alter table public.support_tickets enable row level security;
 revoke all on public.support_tickets from anon;
-revoke insert,update,delete on public.support_tickets from authenticated;
+revoke update,delete on public.support_tickets from authenticated;
+grant insert on public.support_tickets to authenticated;
+create policy "insert own ticket" on public.support_tickets for insert to authenticated with check (created_by=(select auth.uid()) and estado='abierto' and prioridad='normal' and exists (select 1 from public.condominio_usuarios m where m.condominio_id=support_tickets.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true));
 grant select on public.support_tickets to authenticated;
 create policy "ticket creator reads own" on public.support_tickets for select to authenticated
  using (created_by=(select auth.uid()) and exists(select 1 from public.condominio_usuarios m where m.condominio_id=support_tickets.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true));
