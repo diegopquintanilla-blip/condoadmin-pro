@@ -929,9 +929,9 @@ function ModalLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[22px] border border-border bg-card shadow-2xl">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card p-6">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-slate-950/75 p-3 backdrop-blur-sm sm:items-center sm:p-6">
+      <div className="relative my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl overflow-y-auto overscroll-contain rounded-[24px] border border-slate-200 bg-white text-slate-900 shadow-[0_35px_100px_-20px_rgba(0,0,0,.55)] sm:max-h-[90dvh]">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-5 py-4 shadow-sm sm:px-6 sm:py-5">
           <div>
             <h2 className="text-2xl font-bold text-foreground">{title}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
@@ -946,7 +946,7 @@ function ModalLayout({
           </button>
         </div>
 
-        <div className="p-6">{children}</div>
+        <div className="bg-white p-5 sm:p-6">{children}</div>
       </div>
     </div>
   )
