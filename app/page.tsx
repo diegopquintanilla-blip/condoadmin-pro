@@ -27,7 +27,7 @@ export default function HomePage() {
 
             <div>
               <p className="text-lg font-bold leading-tight text-slate-900">
-                CondoAdmin Pro
+                Condomin-Pro
               </p>
               <p className="text-sm text-slate-500">
                 Gestión inteligente de condominios
@@ -98,7 +98,7 @@ export default function HomePage() {
             <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-[#102943] shadow-2xl shadow-black/40">
               <div className="relative h-44 sm:h-56">
                 <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:"linear-gradient(180deg,rgba(5,21,43,.05),rgba(5,21,43,.75)),url('https://unsplash.com/photos/TJsf1pMigZM/download?force=true&w=1800')"}} role="img" aria-label="Edificio residencial moderno"/>
-                <div className="absolute bottom-5 left-6 right-6"><p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">CondoAdmin Pro</p><p className="mt-1 text-2xl font-extrabold">Tu operación, más clara.</p></div>
+                <div className="absolute bottom-5 left-6 right-6"><p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">Condomin-Pro</p><p className="mt-1 text-2xl font-extrabold">Tu operación, más clara.</p></div>
               </div>
               <div className="border-t border-white/10 bg-[#0c233e] p-5 sm:p-6">
                 <div className="flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Vista de funcionalidades</p><p className="mt-1 text-lg font-bold">Control administrativo integral</p></div><Building2 className="h-8 w-8 text-cyan-300"/></div>
@@ -226,7 +226,7 @@ export default function HomePage() {
               </h2>
 
               <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
-                CondoAdmin Pro está preparado para adaptarse a condominios de
+                Condomin-Pro está preparado para adaptarse a condominios de
                 playa, edificios residenciales, asociaciones de propietarios y
                 administradoras.
               </p>
@@ -259,7 +259,7 @@ export default function HomePage() {
 
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-6 py-8 text-sm text-slate-500 md:flex-row">
-          <p>© {new Date().getFullYear()} CondoAdmin Pro.</p>
+          <p>© {new Date().getFullYear()} Condomin-Pro.</p>
           <p>Plataforma de gestión y administración de condominios.</p>
         </div>
       </footer>

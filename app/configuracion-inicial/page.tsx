@@ -39,7 +39,7 @@ export default function PrimerCondominioPage(){
  return <main className="mx-auto max-w-3xl">
   <div className="rounded-[28px] bg-gradient-to-r from-[#0b2446] to-[#087c9e] p-8 text-white shadow-lg md:p-10">
    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15"><Building2 size={27}/></div>
-   <p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">CondoAdmin Pro · Activación P0</p>
+   <p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">Condomin-Pro · Activación P0</p>
    <h1 className="mt-3 text-3xl font-extrabold">Configura tu primer condominio</h1>
    <p className="mt-3 max-w-xl text-sm leading-6 text-sky-100">Ingresa el nombre real de la propiedad. El sistema registrará el condominio y te asignará su administración en una única operación segura.</p>
   </div>
