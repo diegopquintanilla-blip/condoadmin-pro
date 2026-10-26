@@ -7,7 +7,7 @@ const round=(n:number)=>Math.round((n+Number.EPSILON)*100)/100
 export function PayrollPreview(){
  const [mode,setMode]=useState<'dependiente'|'honorarios'>('dependiente')
  const [salary,setSalary]=useState('1230')
- const [days,setDays]=useState('30')
+ const [days,setDays]=useState('0')
  const [monthlyDays,setMonthlyDays]=useState('30')
  const [dayHours,setDayHours]=useState('8')
  const [extra25,setExtra25]=useState('0')
@@ -19,8 +19,8 @@ export function PayrollPreview(){
  const [withholding,setWithholding]=useState(false)
  const [suspended,setSuspended]=useState(false)
  const calculations=useMemo(()=>{
-  const base=amount(salary),worked=Math.min(31,amount(days)),denominator=Math.max(1,Math.min(31,amount(monthlyDays)||30)),hours=Math.max(1,Math.min(24,amount(dayHours)||8))
-  const earned=round(base*worked/denominator)
+  const base=amount(salary),denominator=Math.max(1,Math.min(31,amount(monthlyDays)||30)),unpaid=Math.min(denominator,amount(days)),hours=Math.max(1,Math.min(24,amount(dayHours)||8))
+  const earned=round(base*(denominator-unpaid)/denominator)
   const hourly=base/denominator/hours
   const overtime=round(hourly*1.25*amount(extra25)+hourly*1.35*amount(extra35))
   const additions=amount(bonus),less=amount(deductions)
@@ -35,9 +35,9 @@ export function PayrollPreview(){
  <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label="Tipo de vínculo">
  <button type="button" aria-pressed={mode==='dependiente'} onClick={()=>setMode('dependiente')} className={'rounded-xl px-4 py-2 text-sm font-bold '+(mode==='dependiente'?'bg-sky-800 text-white':'border bg-slate-50')}>Trabajador dependiente</button>
  <button type="button" aria-pressed={mode==='honorarios'} onClick={()=>setMode('honorarios')} className={'rounded-xl px-4 py-2 text-sm font-bold '+(mode==='honorarios'?'bg-sky-800 text-white':'border bg-slate-50')}>Recibo por honorarios</button></div>
- {mode==='dependiente'?<><div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4"><Field label="Sueldo básico mensual (S/)" value={salary} set={setSalary} step=".01"/><Field label="Días trabajados" value={days} set={setDays}/><Field label="Días de base del cálculo" value={monthlyDays} set={setMonthlyDays}/><Field label="Horas de jornada diaria" value={dayHours} set={setDayHours}/><Field label="Horas adicionales al 25%" value={extra25} set={setExtra25} step=".5"/><Field label="Horas adicionales al 35%" value={extra35} set={setExtra35} step=".5"/><Field label="Otros ingresos (S/)" value={bonus} set={setBonus} step=".01"/><Field label="Descuentos autorizados (S/)" value={deductions} set={setDeductions} step=".01"/></div>
- <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><Summary label="Básico proporcional" value={calculations.earned}/><Summary label="Horas adicionales" value={calculations.overtime}/><Summary label="Total bruto" value={calculations.gross}/><Summary label="Neto provisional" value={calculations.net} featured/></div>
- <p className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 p-4 text-sm text-amber-900"><Info size={18} className="mt-0.5 shrink-0"/> Estimación aritmética: no aplica aún AFP/ONP, quinta categoría, EsSalud, asignación familiar, CTS, gratificaciones, vacaciones, faltas, descanso semanal ni reglas especiales. Los recargos por horas adicionales son referenciales; deben verificarse el horario, la jornada y el régimen legal antes de emitir una boleta.</p></>:
+ {mode==='dependiente'?<><div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4"><Field label="Sueldo básico mensual (S/)" value={salary} set={setSalary} step=".01"/><Field label="Días no remunerados (descontables)" value={days} set={setDays}/><Field label="Días base de remuneración" value={monthlyDays} set={setMonthlyDays}/><Field label="Horas de jornada diaria" value={dayHours} set={setDayHours}/><Field label="Horas adicionales al 25%" value={extra25} set={setExtra25} step=".5"/><Field label="Horas adicionales al 35%" value={extra35} set={setExtra35} step=".5"/><Field label="Otros ingresos (S/)" value={bonus} set={setBonus} step=".01"/><Field label="Descuentos autorizados (S/)" value={deductions} set={setDeductions} step=".01"/></div>
+ <p className="mt-3 text-xs text-slate-600">El sueldo mensual ya incluye los descansos remunerados. Ingresa únicamente días efectivamente no remunerados (por ejemplo, faltas sin goce); no restes sábados, domingos ni feriados remunerados. Los descuentos adicionales por descanso semanal ante ausencias deben revisarse por separado.</p><div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><Summary label="Básico proporcional" value={calculations.earned}/><Summary label="Horas adicionales" value={calculations.overtime}/><Summary label="Total bruto" value={calculations.gross}/><Summary label="Neto provisional" value={calculations.net} featured/></div>
+ <p className="mt-4 flex items-start gap-2 rounded-xl bg-amber-50 p-4 text-sm text-amber-900"><Info size={18} className="mt-0.5 shrink-0"/> Estimación aritmética: no incluye descuentos adicionales proporcionales por descanso semanal ante faltas, ni AFP/ONP, quinta categoría, EsSalud, asignación familiar, CTS, gratificaciones, vacaciones, faltas, descanso semanal ni reglas especiales. Los recargos por horas adicionales son referenciales; deben verificarse el horario, la jornada y el régimen legal antes de emitir una boleta.</p></>:
  <><div className="mt-5 grid gap-4 sm:grid-cols-2"><Field label="Honorario por servicio (S/)" value={serviceValue} set={setServiceValue} step=".01"/><Field label="Servicios o unidades" value={serviceUnits} set={setServiceUnits}/></div>
  <div className="mt-4 space-y-3"><label className="flex gap-2 text-sm"><input type="checkbox" checked={withholding} onChange={e=>setWithholding(e.target.checked)}/> El pagador es agente de retención y corresponde evaluar retención</label><label className="flex gap-2 text-sm"><input type="checkbox" checked={suspended} onChange={e=>setSuspended(e.target.checked)}/> Cuenta con suspensión de retenciones vigente y verificable</label></div>
  <div className="mt-6 grid gap-3 sm:grid-cols-3"><Summary label="Honorarios brutos" value={calculations.independentGross}/><Summary label="Retención referencial 8%" value={calculations.tax}/><Summary label="Importe neto estimado" value={calculations.independentNet} featured/></div>
