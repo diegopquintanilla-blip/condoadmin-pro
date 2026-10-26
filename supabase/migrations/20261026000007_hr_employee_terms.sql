@@ -22,15 +22,15 @@ alter table public.hr_employee_terms enable row level security;
 revoke all on public.hr_employee_terms from anon,authenticated;
 grant select,insert,update on public.hr_employee_terms to authenticated;
 create policy "hr terms read admin only" on public.hr_employee_terms for select to authenticated using (
- exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
 );
 create policy "hr terms insert admin only" on public.hr_employee_terms for insert to authenticated with check (
- exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
  and exists(select 1 from public.personal p where p.id=hr_employee_terms.personal_id and p.condominio_id=hr_employee_terms.condominio_id)
 );
 create policy "hr terms update admin only" on public.hr_employee_terms for update to authenticated using (
- exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
 ) with check (
- exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_employee_terms.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
  and exists(select 1 from public.personal p where p.id=hr_employee_terms.personal_id and p.condominio_id=hr_employee_terms.condominio_id)
 );
