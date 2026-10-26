@@ -4,6 +4,7 @@ import {usePathname} from 'next/navigation'
 import {Building2, LayoutDashboard, ListTodo, Users, PawPrint, Layers3, Landmark, House, CarFront, Bike, Archive, IdCard, ShieldCheck, Mail, Boxes, Wallet, Gamepad2, Wrench, MessagesSquare, CalendarDays, Vote, ChartColumn, BookOpen, LifeBuoy, Settings, Menu, X} from 'lucide-react'
 import {useState,type ReactNode} from 'react'
 import {SessionHeader} from '@/components/SessionHeader'
+import {SupportFloatingIndicator} from '@/components/SupportFloatingIndicator'
 const nav=[
 {section:'General',items:[['Dashboard','/dashboard',LayoutDashboard],['Tareas','/operaciones/tareas',ListTodo]]},
 {section:'Edificio',items:[['Bloques inmobiliarios','/bloques-inmobiliarios',Building2],['Residentes','/residentes',Users],['Mascotas','/modulos/mascotas',PawPrint],['Etapas','/etapas',Layers3],['Torres','/modulos/torres',Landmark],['Inmuebles','/modulos/inmuebles',House],['Estacionamientos','/modulos/estacionamientos',CarFront],['Vehículos','/modulos/vehiculos',Bike],['Depósitos','/modulos/depositos',Archive],['Personal','/modulos/personal',IdCard],['Control de acceso','/modulos/control-acceso',ShieldCheck],['Mensajería','/modulos/mensajeria',Mail]]},
@@ -21,5 +22,5 @@ export function CondoShell({children}:{children:ReactNode}){
  <div className="flex"><aside className={`${open?'block':'hidden'} fixed inset-x-0 bottom-0 top-16 z-20 w-64 overflow-y-auto border-r border-slate-200 bg-white shadow-[10px_0_36px_-25px_rgba(8,40,75,.35)] md:sticky md:top-16 md:block md:h-[calc(100vh-4rem)] md:shrink-0`}>
  <div className="bg-gradient-to-r from-[#092c50] to-[#17618d] px-5 py-5 text-xs font-bold uppercase tracking-[.2em] text-white">Panel de gestión</div>
  <nav className="space-y-4 px-3 py-4" aria-label="Navegación principal">{nav.map(group=><section key={group.section}><p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-widest text-slate-400">{group.section}</p>{group.items.map(([label,href,Icon])=><Link onClick={()=>setOpen(false)} key={href} href={href} className={`mb-0.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${(pathname===href||pathname.startsWith(href+'/'))?'bg-gradient-to-r from-[#0a4879] to-[#1176a3] font-semibold text-white shadow-md shadow-sky-900/15':'text-slate-600 hover:bg-sky-50 hover:text-sky-900'}`}><Icon size={17}/>{label}</Link>)}</section>)}</nav>
- </aside><div className="min-w-0 flex-1 p-4 md:p-7 xl:p-9">{children}</div></div></div>
+ </aside><div className="min-w-0 flex-1 p-4 md:p-7 xl:p-9">{children}</div></div><SupportFloatingIndicator/></div>
 }
