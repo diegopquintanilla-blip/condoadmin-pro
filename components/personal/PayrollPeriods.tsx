@@ -17,7 +17,7 @@ export function PayrollPeriods({condominioId,staff}:{condominioId:string;staff:{
  if(active){setPeriods((data??[]) as Period[]);setError(error?'Historial no disponible hasta aplicar y validar la migración de planillas.':'');setLoading(false)}
  }void load();return()=>{active=false}},[condominioId])
  async function createDraft(){
-  if(!/^\\d{4}-(0[1-9]|1[0-2])$/.test(month)){setFeedback('Selecciona un mes válido.');return}
+  if(!/^[0-9]{4}-(0[1-9]|1[0-2])$/.test(month)){setFeedback('Selecciona un mes válido.');return}
   setSaving(true);setFeedback('')
   const {data:{user},error:authError}=await supabase.auth.getUser()
   if(authError||!user){setFeedback('La sesión no está disponible.');setSaving(false);return}
