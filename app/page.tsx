@@ -59,13 +59,13 @@ export default function HomePage() {
               href="/login"
               className="rounded-xl bg-[#1f4b7a] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#173a60]"
             >
-              Ver demo
+              Ingresar
             </Link>
           </div>
         </div>
       </header>
 
-      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-[1fr_0.9fr] lg:py-28">
+      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-[1.08fr_1fr] lg:py-28">
         <div>
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1f4b7a]/20 bg-[#1f4b7a]/10 px-4 py-2 text-sm font-semibold text-[#1f4b7a]">
             <ShieldCheck className="h-4 w-4" />
@@ -73,13 +73,11 @@ export default function HomePage() {
           </div>
 
           <h1 className="max-w-3xl text-5xl font-extrabold leading-tight tracking-tight text-slate-950 md:text-6xl">
-            Administra tu condominio con orden, control y transparencia
+            Administra tu condominio con orden, control y confianza.
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            CondoAdmin Pro centraliza la gestión de residentes, lotes,
-            inmuebles, pagos, morosidad, incidencias, reservas, visitas,
-            documentos y comunicación administrativa en una sola plataforma.
+            Centraliza residentes, inmuebles, pagos, incidencias y comunicación administrativa en una plataforma moderna. Amplía tu gestión con módulos adicionales según tus necesidades.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -87,7 +85,7 @@ export default function HomePage() {
               href="/login"
               className="inline-flex items-center justify-center rounded-xl bg-[#1f4b7a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#173a60]"
             >
-              Explorar demo
+              Ver plataforma
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
 
@@ -95,32 +93,22 @@ export default function HomePage() {
               href="#contacto"
               className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50"
             >
-              Solicitar información
+              Solicitar demo
             </a>
           </div>
         </div>
 
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-300/40">
-          <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-[#1f4b7a]/30 bg-gradient-to-br from-[#eef5fb] to-white p-8 text-center">
-            <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-[#1f4b7a]/10 text-[#1f4b7a]">
-              <Building2 className="h-12 w-12" />
+        <div className="relative min-h-[480px] overflow-hidden rounded-[2rem] border border-white/50 bg-[#0b2446] shadow-2xl shadow-slate-400/30 lg:min-h-[560px]">
+          <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:"linear-gradient(180deg,rgba(11,36,70,.08) 15%,rgba(11,36,70,.72) 100%),url('https://unsplash.com/photos/TJsf1pMigZM/download?force=true&w=1800')"}} role="img" aria-label="Fachada moderna de un edificio residencial elegante"/>
+          <div className="relative flex h-full min-h-[480px] flex-col justify-end gap-4 p-6 text-white lg:min-h-[560px] lg:p-8">
+            <div className="self-start rounded-full border border-white/30 bg-[#0b2446]/70 px-4 py-2 text-xs font-bold tracking-wide backdrop-blur-md">
+              Gestión moderna de condominios
             </div>
-
-            <h2 className="max-w-md text-2xl font-bold text-slate-950">
-              Imagen referencial de gestión y administración de condominios
-            </h2>
-
-            <p className="mt-4 max-w-md text-sm leading-6 text-slate-600">
-              Este espacio queda reservado para colocar una imagen profesional
-              del sistema, administración, seguridad, pagos, reservas y gestión
-              de condominios.
-            </p>
-
-            <div className="mt-8 grid w-full max-w-md grid-cols-2 gap-4">
-              <VisualTag icon={WalletCards} label="Pagos" />
-              <VisualTag icon={Users} label="Residentes" />
-              <VisualTag icon={LockKeyhole} label="Accesos" />
-              <VisualTag icon={CalendarCheck} label="Reservas" />
+            <h2 className="max-w-sm text-3xl font-extrabold leading-tight">Un espacio mejor administrado comienza aquí.</h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/25 bg-[#0b2446]/75 p-4 backdrop-blur-md"><WalletCards className="mb-2 h-6 w-6 text-sky-200"/><strong className="block text-sm">Pagos y cobranzas</strong><span className="mt-1 block text-xs text-sky-100">Recibos y validación de pagos</span></div>
+              <div className="rounded-2xl border border-white/25 bg-[#0b2446]/75 p-4 backdrop-blur-md"><Users className="mb-2 h-6 w-6 text-sky-200"/><strong className="block text-sm">Gestión de residentes</strong><span className="mt-1 block text-xs text-sky-100">Información de la comunidad</span></div>
+              <div className="rounded-2xl border border-white/25 bg-[#0b2446]/75 p-4 backdrop-blur-md sm:col-span-2"><ClipboardList className="mb-2 h-6 w-6 text-sky-200"/><strong className="block text-sm">Operación centralizada</strong><span className="mt-1 block text-xs text-sky-100">Incidencias, tareas y comunicados</span></div>
             </div>
           </div>
         </div>
@@ -148,7 +136,7 @@ export default function HomePage() {
             <BenefitCard
               icon={WalletCards}
               title="Control financiero"
-              description="Organiza recibos, pagos, comprobantes, egresos, ingresos y morosidad."
+              description="Gestiona recibos, pagos reportados y su validación administrativa."
             />
 
             <BenefitCard
@@ -160,7 +148,7 @@ export default function HomePage() {
             <BenefitCard
               icon={LockKeyhole}
               title="Control de acceso"
-              description="Registra visitantes, proveedores, delivery, personal y autorizaciones."
+              description="Control de visitantes y autorizaciones, previsto para próximas fases."
             />
 
             <BenefitCard
@@ -198,13 +186,13 @@ export default function HomePage() {
           <ModuleCard
             icon={WalletCards}
             title="Finanzas y cobranzas"
-            description="Presupuesto, recibos, pagos, morosidad, comprobantes, ingresos y egresos."
+            description="Recibos de mantenimiento, pagos reportados y conciliación de información."
           />
 
           <ModuleCard
             icon={CalendarCheck}
             title="Reservas de áreas comunes"
-            description="Gestión de piscina, canchas, club house, parrillas, eventos y espacios compartidos."
+            description="Reservas de espacios compartidos, previstas para futuras fases."
           />
 
           <ModuleCard
