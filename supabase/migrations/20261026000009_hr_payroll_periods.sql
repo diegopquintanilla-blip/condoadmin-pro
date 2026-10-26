@@ -32,16 +32,16 @@ revoke all on public.hr_payroll_periods,public.hr_payroll_lines from anon,authen
 grant select on public.hr_payroll_periods,public.hr_payroll_lines to authenticated;
 grant insert on public.hr_payroll_periods to authenticated;
 create policy "admin only read payroll periods" on public.hr_payroll_periods for select to authenticated
- using(exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_periods.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta')));
+ using(exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_periods.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin')));
 create policy "admin only read payroll lines" on public.hr_payroll_lines for select to authenticated
- using(exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta')));
+ using(exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin')));
 -- No client writes until atomic creation, approval, audit and legal calculations are tested.
 
 -- Draft creation: cannot submit any other initial state.
 create policy "hr payroll create own draft" on public.hr_payroll_periods for insert to authenticated
  with check (estado='borrador' and created_by=(select auth.uid()) and exists (
  select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_periods.condominio_id
- and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta')));
+ and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin')));
 -- Payroll lines and period state updates remain read-only for all browser clients.
 
 -- Controlled line editing, limited to open drafts; employee must belong to the same condo.
@@ -49,13 +49,13 @@ grant insert,update on public.hr_payroll_lines to authenticated;
 create policy "hr payroll line insert draft" on public.hr_payroll_lines for insert to authenticated with check (
  exists(select 1 from public.hr_payroll_periods period where period.id=hr_payroll_lines.payroll_id and period.condominio_id=hr_payroll_lines.condominio_id and period.estado='borrador')
  and exists(select 1 from public.personal p where p.id=hr_payroll_lines.personal_id and p.condominio_id=hr_payroll_lines.condominio_id)
- and exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ and exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
 );
 create policy "hr payroll line update draft" on public.hr_payroll_lines for update to authenticated using (
  exists(select 1 from public.hr_payroll_periods period where period.id=hr_payroll_lines.payroll_id and period.condominio_id=hr_payroll_lines.condominio_id and period.estado='borrador')
- and exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ and exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
 ) with check (
  exists(select 1 from public.hr_payroll_periods period where period.id=hr_payroll_lines.payroll_id and period.condominio_id=hr_payroll_lines.condominio_id and period.estado='borrador')
  and exists(select 1 from public.personal p where p.id=hr_payroll_lines.personal_id and p.condominio_id=hr_payroll_lines.condominio_id)
- and exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta'))
+ and exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin'))
 );
