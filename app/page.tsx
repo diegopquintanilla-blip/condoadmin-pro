@@ -59,56 +59,57 @@ export default function HomePage() {
               href="/login"
               className="rounded-xl bg-[#1f4b7a] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#173a60]"
             >
-              Ingresar
+              Acceder
             </Link>
           </div>
         </div>
       </header>
 
-      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-[1.08fr_1fr] lg:py-28">
-        <div>
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#1f4b7a]/20 bg-[#1f4b7a]/10 px-4 py-2 text-sm font-semibold text-[#1f4b7a]">
-            <ShieldCheck className="h-4 w-4" />
-            Plataforma SaaS para administración de condominios
-          </div>
-
-          <h1 className="max-w-3xl text-5xl font-extrabold leading-tight tracking-tight text-slate-950 md:text-6xl">
-            Administra tu condominio con orden, control y confianza.
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-            Centraliza residentes, inmuebles, pagos, incidencias y comunicación administrativa en una plataforma moderna. Amplía tu gestión con módulos adicionales según tus necesidades.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center rounded-xl bg-[#1f4b7a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#173a60]"
-            >
-              Ver plataforma
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-
-            <a
-              href="#contacto"
-              className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50"
-            >
-              Solicitar demo
-            </a>
-          </div>
-        </div>
-
-        <div className="relative min-h-[480px] overflow-hidden rounded-[2rem] border border-white/50 bg-[#0b2446] shadow-2xl shadow-slate-400/30 lg:min-h-[560px]">
-          <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:"linear-gradient(180deg,rgba(11,36,70,.08) 15%,rgba(11,36,70,.72) 100%),url('https://unsplash.com/photos/TJsf1pMigZM/download?force=true&w=1800')"}} role="img" aria-label="Fachada moderna de un edificio residencial elegante"/>
-          <div className="relative flex h-full min-h-[480px] flex-col justify-end gap-4 p-6 text-white lg:min-h-[560px] lg:p-8">
-            <div className="self-start rounded-full border border-white/30 bg-[#0b2446]/70 px-4 py-2 text-xs font-bold tracking-wide backdrop-blur-md">
-              Gestión moderna de condominios
+      <section className="relative isolate overflow-hidden bg-[#071a32] text-white">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_5%,rgba(24,156,191,.28),transparent_52%),radial-gradient(ellipse_at_2%_75%,rgba(28,87,162,.25),transparent_55%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)] [background-size:52px_52px]" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:py-24">
+          <div>
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-200/10 px-4 py-2 text-xs font-bold uppercase tracking-[.13em] text-cyan-200">
+              <ShieldCheck className="h-4 w-4" /> Tecnología para comunidades mejor gestionadas
             </div>
-            <h2 className="max-w-sm text-3xl font-extrabold leading-tight">Un espacio mejor administrado comienza aquí.</h2>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/25 bg-[#0b2446]/75 p-4 backdrop-blur-md"><WalletCards className="mb-2 h-6 w-6 text-sky-200"/><strong className="block text-sm">Pagos y cobranzas</strong><span className="mt-1 block text-xs text-sky-100">Recibos y validación de pagos</span></div>
-              <div className="rounded-2xl border border-white/25 bg-[#0b2446]/75 p-4 backdrop-blur-md"><Users className="mb-2 h-6 w-6 text-sky-200"/><strong className="block text-sm">Gestión de residentes</strong><span className="mt-1 block text-xs text-sky-100">Información de la comunidad</span></div>
-              <div className="rounded-2xl border border-white/25 bg-[#0b2446]/75 p-4 backdrop-blur-md sm:col-span-2"><ClipboardList className="mb-2 h-6 w-6 text-sky-200"/><strong className="block text-sm">Operación centralizada</strong><span className="mt-1 block text-xs text-sky-100">Incidencias, tareas y comunicados</span></div>
+            <h1 className="max-w-2xl text-4xl font-extrabold leading-[1.13] tracking-tight sm:text-5xl lg:text-[3.65rem]">
+              Toda la gestión de tu condominio. <span className="text-cyan-300">En un solo lugar.</span>
+            </h1>
+            <p className="mt-7 max-w-xl text-base leading-8 text-slate-300 sm:text-lg">
+              Centraliza inmuebles, residentes, recibos, incidencias y comunicados. Una experiencia más ordenada para administradoras, juntas directivas y comunidades residenciales.
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a href="#contacto" className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-3.5 text-sm font-extrabold text-[#071a32] shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-300">
+                Solicitar una demostración <ArrowRight className="h-4 w-4"/>
+              </a>
+              <Link href="/login" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/20">
+                Acceso a clientes
+              </Link>
+            </div>
+            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/15 pt-6 text-sm text-slate-300">
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-300"/> Gestión por condominio</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-300"/> Accesos por roles</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-300"/> Información centralizada</span>
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-[2.5rem] bg-cyan-300/10 blur-3xl" aria-hidden="true"/>
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-[#102943] shadow-2xl shadow-black/40">
+              <div className="relative h-44 sm:h-56">
+                <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:"linear-gradient(180deg,rgba(5,21,43,.05),rgba(5,21,43,.75)),url('https://unsplash.com/photos/TJsf1pMigZM/download?force=true&w=1800')"}} role="img" aria-label="Edificio residencial moderno"/>
+                <div className="absolute bottom-5 left-6 right-6"><p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">CondoAdmin Pro</p><p className="mt-1 text-2xl font-extrabold">Tu operación, más clara.</p></div>
+              </div>
+              <div className="border-t border-white/10 bg-[#0c233e] p-5 sm:p-6">
+                <div className="flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Vista de funcionalidades</p><p className="mt-1 text-lg font-bold">Control administrativo integral</p></div><Building2 className="h-8 w-8 text-cyan-300"/></div>
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><WalletCards className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Finanzas</p><p className="mt-1 text-xs text-slate-300">Recibos y pagos reportados</p></div>
+                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><Users className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Residentes</p><p className="mt-1 text-xs text-slate-300">Unidades y propietarios</p></div>
+                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><ClipboardList className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Operación</p><p className="mt-1 text-xs text-slate-300">Mantenimiento y gestión</p></div>
+                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><Mail className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Comunicación</p><p className="mt-1 text-xs text-slate-300">Boletines y comunicados</p></div>
+                </div>
+                <p className="mt-4 text-[11px] text-slate-400">Vista ilustrativa de los módulos · sin datos simulados de clientes</p>
+              </div>
             </div>
           </div>
         </div>
