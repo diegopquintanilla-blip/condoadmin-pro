@@ -25,8 +25,9 @@ export function SupportFloatingIndicator(){
   const {data:{subscription}}=supabase.auth.onAuthStateChange(()=>{void refresh()})
   const onFocus=()=>{void refresh()}
   window.addEventListener('focus',onFocus)
+  window.addEventListener('support-notifications-updated',onFocus)
   const interval=window.setInterval(()=>void refresh(),60000)
-  return()=>{subscription.unsubscribe();window.removeEventListener('focus',onFocus);window.clearInterval(interval)}
+  return()=>{subscription.unsubscribe();window.removeEventListener('focus',onFocus);window.removeEventListener('support-notifications-updated',onFocus);window.clearInterval(interval)}
  },[refresh])
  if(pathname.startsWith('/login'))return null
  return <div className="fixed bottom-5 right-4 z-40 sm:bottom-7 sm:right-7">
