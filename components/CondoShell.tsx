@@ -6,11 +6,11 @@ import {useState,type ReactNode} from 'react'
 const nav=[
 {section:'General',items:[['Dashboard','/dashboard',LayoutDashboard],['Tareas','/operaciones/tareas',ListTodo]]},
 {section:'Edificio',items:[['Bloques inmobiliarios','/bloques-inmobiliarios',Building2],['Residentes','/residentes',Users],['Mascotas','/modulos/mascotas',PawPrint],['Etapas','/etapas',Layers3],['Torres','/modulos/torres',Landmark],['Inmuebles','/modulos/inmuebles',House],['Estacionamientos','/modulos/estacionamientos',CarFront],['Vehículos','/modulos/vehiculos',Bike],['Depósitos','/modulos/depositos',Archive],['Personal','/modulos/personal',IdCard],['Control de acceso','/modulos/control-acceso',ShieldCheck],['Mensajería','/modulos/mensajeria',Mail]]},
-{section:'Operaciones',items:[['Servicios','/modulos/servicios',Boxes],['Finanzas','/finanzas',Wallet],['Áreas comunes','/modulos/areas-comunes',Gamepad2],['Mantenimientos','/modulos/mantenimientos',Wrench],['Comunicación','/modulos/comunicacion',MessagesSquare],['Visor de eventos','/modulos/visor-de-eventos',CalendarDays],['Votaciones','/modulos/votaciones',Vote],['Reportes','/modulos/reportes',ChartColumn],['Guías y tutoriales','/modulos/guias-y-tutoriales',BookOpen],['Configuración','/configuracion-inicial',Settings]]}
+{section:'Operaciones',items:[['Servicios','/modulos/servicios',Boxes],['Finanzas','/finanzas',Wallet],['Áreas comunes','/modulos/areas-comunes',Gamepad2],['Mantenimientos','/operaciones/incidencias',Wrench],['Comunicación','/operaciones/comunicados',MessagesSquare],['Visor de eventos','/modulos/visor-de-eventos',CalendarDays],['Votaciones','/modulos/votaciones',Vote],['Reportes','/reportes',ChartColumn],['Guías y tutoriales','/modulos/guias-y-tutoriales',BookOpen],['Configuración','/configuracion-inicial',Settings]]}
 ] as const
 export function CondoShell({children}:{children:ReactNode}){
  const pathname=usePathname();const [open,setOpen]=useState(false)
- const inside=['/dashboard','/residentes','/etapas','/configuracion-inicial','/modulos'].some(p=>pathname===p||pathname.startsWith(p+'/'))
+ const inside=['/dashboard','/residentes','/etapas','/configuracion-inicial','/modulos','/finanzas','/bloques-inmobiliarios','/operaciones','/reportes'].some(p=>pathname===p||pathname.startsWith(p+'/'))
  if(!inside)return <>{children}</>
  return <div className="min-h-screen bg-[#f2f6fb] text-slate-800">
  <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 shadow-sm backdrop-blur md:px-7">
