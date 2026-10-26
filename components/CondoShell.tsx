@@ -3,6 +3,7 @@ import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {Building2, LayoutDashboard, ListTodo, Users, PawPrint, Layers3, Landmark, House, CarFront, Bike, Archive, IdCard, ShieldCheck, Mail, Boxes, Wallet, Gamepad2, Wrench, MessagesSquare, CalendarDays, Vote, ChartColumn, BookOpen, LifeBuoy, Settings, Menu, X} from 'lucide-react'
 import {useState,type ReactNode} from 'react'
+import {SessionHeader} from '@/components/SessionHeader'
 const nav=[
 {section:'General',items:[['Dashboard','/dashboard',LayoutDashboard],['Tareas','/operaciones/tareas',ListTodo]]},
 {section:'Edificio',items:[['Bloques inmobiliarios','/bloques-inmobiliarios',Building2],['Residentes','/residentes',Users],['Mascotas','/modulos/mascotas',PawPrint],['Etapas','/etapas',Layers3],['Torres','/modulos/torres',Landmark],['Inmuebles','/modulos/inmuebles',House],['Estacionamientos','/modulos/estacionamientos',CarFront],['Vehículos','/modulos/vehiculos',Bike],['Depósitos','/modulos/depositos',Archive],['Personal','/modulos/personal',IdCard],['Control de acceso','/modulos/control-acceso',ShieldCheck],['Mensajería','/modulos/mensajeria',Mail]]},
@@ -15,7 +16,7 @@ export function CondoShell({children}:{children:ReactNode}){
  return <div className="min-h-screen bg-[#f0f4f9] text-slate-800">
  <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 shadow-[0_4px_24px_-18px_rgba(8,40,75,.4)] backdrop-blur md:px-7">
  <div className="flex items-center gap-3"><button aria-label="Abrir menú" className="rounded-lg border p-2 md:hidden" onClick={()=>setOpen(!open)}>{open?<X size={19}/>:<Menu size={19}/>}</button><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-700 to-[#092d55] text-white shadow-lg"><Building2 size={21}/></div><div className="leading-tight"><strong className="block text-[15px] font-extrabold tracking-tight text-[#0a3154]">CondoAdmin Pro</strong><span className="block text-[10px] font-semibold uppercase tracking-widest text-slate-400">Plataforma residencial</span></div></div>
- <span className="hidden rounded-lg border px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600 sm:block">Administración de condominios</span>
+ <SessionHeader/>
  </header>
  <div className="flex"><aside className={`${open?'block':'hidden'} fixed inset-x-0 bottom-0 top-16 z-20 w-64 overflow-y-auto border-r border-slate-200 bg-white shadow-[10px_0_36px_-25px_rgba(8,40,75,.35)] md:sticky md:top-16 md:block md:h-[calc(100vh-4rem)] md:shrink-0`}>
  <div className="bg-gradient-to-r from-[#092c50] to-[#17618d] px-5 py-5 text-xs font-bold uppercase tracking-[.2em] text-white">Panel de gestión</div>
