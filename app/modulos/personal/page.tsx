@@ -6,6 +6,7 @@ import {RegistrarTrabajador} from '@/components/personal/RegistrarTrabajador'
 import {PayrollPreview} from '@/components/personal/PayrollPreview'
 import {EmploymentTerms} from '@/components/personal/EmploymentTerms'
 import {MonthlyAttendance} from '@/components/personal/MonthlyAttendance'
+import {StatutoryContributionsPreview} from '@/components/personal/StatutoryContributionsPreview'
 export default async function PersonalPage({searchParams}:{searchParams:Promise<{condominio?:string;pagina?:string}>}){
  const db=await createSupabaseServerClient()
  const {data:{user}}=await db.auth.getUser()
@@ -26,6 +27,7 @@ export default async function PersonalPage({searchParams}:{searchParams:Promise<
  {ids.length>1?<nav className="flex flex-wrap gap-2">{ids.map(id=><Link key={id} href={'?condominio='+encodeURIComponent(id)} className={'rounded-xl border px-4 py-2 text-sm '+(current===id?'bg-sky-800 text-white':'bg-white text-slate-700')}>{names.get(id)||id.slice(0,8)}</Link>)}</nav>:null}
  {!current?<p className="rounded-xl border bg-white p-5">Primero configura un condominio.</p>:null}
  {current&&canAdmin?<PayrollPreview/>:null}
+ {current&&canAdmin?<StatutoryContributionsPreview/>:null}
  {current&&canAdmin?<MonthlyAttendance condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
  {current&&canAdmin?<EmploymentTerms condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
  {current&&canAdmin?<RegistrarTrabajador key={current} condominioId={current}/>:current?<p className="rounded-xl bg-amber-50 p-5 text-sm">Los datos laborales están disponibles únicamente para administración y junta.</p>:null}
