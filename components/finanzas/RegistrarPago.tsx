@@ -20,9 +20,9 @@ export function RegistrarPago({condominioId,recibos}:{condominioId:string;recibo
   const amount=Number(monto)
   if(!eligible.some(x=>x.id===recibo)||!Number.isFinite(amount)||amount<=0||amount>1000000000||!/^\d{4}-\d{2}-\d{2}$/.test(fecha)||operacion.trim().length>100){setMessage('Verifica el recibo, importe, fecha y operación.');return}
   setBusy(true)
-  const {error}=await supabase.from('pagos').insert({condominio_id:condominioId,recibo_id:recibo,monto:amount,metodo,fecha_pago:fecha,numero_operacion:operacion.trim()||null,estado:'pendiente_validar'})
+  const {data,error}=await supabase.from('pagos').insert({condominio_id:condominioId,recibo_id:recibo,monto:amount,metodo,fecha_pago:fecha,numero_operacion:operacion.trim()||null,estado:'pendiente_validar'}).select('id,condominio_id,recibo_id,estado').single()
   setBusy(false)
-  if(error){setMessage(error.code==='23505'?'Ya existe una operación registrada con esa referencia.':'No se pudo registrar el pago. Revisa los permisos y el recibo.');return}
+  if(error||!data||data.condominio_id!==condominioId||data.recibo_id!==recibo||data.estado!=='pendiente_validar'){setMessage(error?.code==='23505'?'Ya existe una operación registrada con esa referencia.':'No se pudo confirmar el pago pendiente. Verifica los permisos y consulta el historial antes de volver a intentar.');return}
   setMonto('');setOperacion('');setRecibo('');setMessage('Pago registrado como pendiente de validación.');router.refresh()
  }
  return <section className="rounded-2xl border bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><CreditCard className="text-sky-700"/><div><h2 className="text-lg font-bold">Registrar pago reportado</h2><p className="text-sm text-slate-500">Los pagos nuevos siempre requieren validación administrativa.</p></div></div>
