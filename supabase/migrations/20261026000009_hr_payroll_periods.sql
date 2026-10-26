@@ -30,8 +30,16 @@ alter table public.hr_payroll_periods enable row level security;
 alter table public.hr_payroll_lines enable row level security;
 revoke all on public.hr_payroll_periods,public.hr_payroll_lines from anon,authenticated;
 grant select on public.hr_payroll_periods,public.hr_payroll_lines to authenticated;
+grant insert on public.hr_payroll_periods to authenticated;
 create policy "admin only read payroll periods" on public.hr_payroll_periods for select to authenticated
  using(exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_periods.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta')));
 create policy "admin only read payroll lines" on public.hr_payroll_lines for select to authenticated
  using(exists(select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_lines.condominio_id and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta')));
 -- No client writes until atomic creation, approval, audit and legal calculations are tested.
+
+-- Draft creation: cannot submit any other initial state.
+create policy "hr payroll create own draft" on public.hr_payroll_periods for insert to authenticated
+ with check (estado='borrador' and created_by=(select auth.uid()) and exists (
+ select 1 from public.condominio_usuarios m where m.condominio_id=hr_payroll_periods.condominio_id
+ and m.user_id=(select auth.uid()) and m.is_active=true and m.role::text in ('admin','super_admin','junta')));
+-- Payroll lines and period state updates remain read-only for all browser clients.
