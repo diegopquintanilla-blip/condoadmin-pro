@@ -234,32 +234,17 @@ export default function EtapasPage() {
   }
 
   return (
-    <main className="space-y-8">
-      <section className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
-        <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
+    <main className="mx-auto max-w-7xl space-y-7">
+      <section className="rounded-[28px] border border-white/10 bg-gradient-to-r from-[#0b2446] to-[#087c9e] p-8 text-white shadow-xl">
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-              <MapIcon className="h-4 w-4" />
-              Organización territorial del condominio
-            </div>
-
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Etapas / Núcleos
-            </h1>
-
-            <p className="mt-2 max-w-3xl text-muted-foreground">
-              Registra etapas, núcleos, sectores, manzanas o zonas para organizar
-              lotes, inmuebles y áreas del condominio. Esta pantalla no contiene
-              información demo.
-            </p>
+            <a href="/dashboard" className="inline-flex items-center gap-2 text-sm text-sky-100 hover:text-white">← Volver al dashboard</a>
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-sm font-medium text-sky-50"><MapIcon className="h-4 w-4" /> Organización territorial</div>
+            <h1 className="mt-3 text-3xl font-extrabold tracking-tight">Etapas / Núcleos</h1>
+            <p className="mt-2 max-w-3xl text-sm text-sky-100">Organiza etapas, núcleos, sectores, manzanas y zonas de tus condominios con información real.</p>
           </div>
-
-          <Button
-            className="bg-primary hover:bg-primary/90"
-            onClick={openNewEtapaModal}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Nueva etapa / núcleo
+          <Button className="shrink-0 rounded-xl bg-white px-5 py-3 font-bold text-[#0b2446] hover:bg-sky-50" onClick={openNewEtapaModal}>
+            <Plus className="mr-2 h-4 w-4" /> Nueva etapa / núcleo
           </Button>
         </div>
       </section>
@@ -276,7 +261,7 @@ export default function EtapasPage() {
         </div>
       )}
 
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           icon={Layers3}
           title="Total registros"
@@ -310,7 +295,7 @@ export default function EtapasPage() {
         />
       </section>
 
-      <section className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+      <section className="rounded-[22px] border border-slate-200/70 bg-white p-6 shadow-[0_15px_36px_-30px_rgba(8,40,75,.4)]">
         <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
           <div className="relative w-full xl:w-[520px]">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -381,7 +366,7 @@ export default function EtapasPage() {
           onAction={openNewEtapaModal}
         />
       ) : (
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
+        <section className="overflow-hidden rounded-[22px] border border-slate-200/70 bg-white shadow-[0_15px_36px_-30px_rgba(8,40,75,.4)]">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1000px]">
               <thead className="border-b border-border bg-secondary">
@@ -708,7 +693,7 @@ function SummaryCard({
   }
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
+    <div className="rounded-[22px] border border-slate-200/70 bg-white p-6 shadow-[0_15px_36px_-30px_rgba(8,40,75,.4)]">
       <div
         className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${styles[tone]}`}
       >
