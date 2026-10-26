@@ -4,7 +4,7 @@ import {usePathname} from 'next/navigation'
 import {Building2, LayoutDashboard, ListTodo, Users, PawPrint, Layers3, Landmark, House, CarFront, Bike, Archive, IdCard, ShieldCheck, Mail, Boxes, Wallet, Gamepad2, Wrench, MessagesSquare, CalendarDays, Vote, ChartColumn, BookOpen, Settings, Menu, X} from 'lucide-react'
 import {useState,type ReactNode} from 'react'
 const nav=[
-{section:'General',items:[['Dashboard','/dashboard',LayoutDashboard],['Tareas','/modulos/tareas',ListTodo]]},
+{section:'General',items:[['Dashboard','/dashboard',LayoutDashboard],['Tareas','/operaciones/tareas',ListTodo]]},
 {section:'Edificio',items:[['Bloques inmobiliarios','/bloques-inmobiliarios',Building2],['Residentes','/residentes',Users],['Mascotas','/modulos/mascotas',PawPrint],['Etapas','/etapas',Layers3],['Torres','/modulos/torres',Landmark],['Inmuebles','/modulos/inmuebles',House],['Estacionamientos','/modulos/estacionamientos',CarFront],['Vehículos','/modulos/vehiculos',Bike],['Depósitos','/modulos/depositos',Archive],['Personal','/modulos/personal',IdCard],['Control de acceso','/modulos/control-acceso',ShieldCheck],['Mensajería','/modulos/mensajeria',Mail]]},
 {section:'Operaciones',items:[['Servicios','/modulos/servicios',Boxes],['Finanzas','/finanzas',Wallet],['Áreas comunes','/modulos/areas-comunes',Gamepad2],['Mantenimientos','/modulos/mantenimientos',Wrench],['Comunicación','/modulos/comunicacion',MessagesSquare],['Visor de eventos','/modulos/visor-de-eventos',CalendarDays],['Votaciones','/modulos/votaciones',Vote],['Reportes','/modulos/reportes',ChartColumn],['Guías y tutoriales','/modulos/guias-y-tutoriales',BookOpen],['Configuración','/configuracion-inicial',Settings]]}
 ] as const
