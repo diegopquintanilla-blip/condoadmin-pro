@@ -4,6 +4,7 @@ import {Users,ArrowLeft} from 'lucide-react'
 import {createSupabaseServerClient} from '@/lib/supabase/server'
 import {RegistrarTrabajador} from '@/components/personal/RegistrarTrabajador'
 import {PayrollPreview} from '@/components/personal/PayrollPreview'
+import {EmploymentTerms} from '@/components/personal/EmploymentTerms'
 export default async function PersonalPage({searchParams}:{searchParams:Promise<{condominio?:string;pagina?:string}>}){
  const db=await createSupabaseServerClient()
  const {data:{user}}=await db.auth.getUser()
@@ -24,6 +25,7 @@ export default async function PersonalPage({searchParams}:{searchParams:Promise<
  {ids.length>1?<nav className="flex flex-wrap gap-2">{ids.map(id=><Link key={id} href={'?condominio='+encodeURIComponent(id)} className={'rounded-xl border px-4 py-2 text-sm '+(current===id?'bg-sky-800 text-white':'bg-white text-slate-700')}>{names.get(id)||id.slice(0,8)}</Link>)}</nav>:null}
  {!current?<p className="rounded-xl border bg-white p-5">Primero configura un condominio.</p>:null}
  {current&&canAdmin?<PayrollPreview/>:null}
+ {current&&canAdmin?<EmploymentTerms condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
  {current&&canAdmin?<RegistrarTrabajador key={current} condominioId={current}/>:current?<p className="rounded-xl bg-amber-50 p-5 text-sm">Los datos laborales están disponibles únicamente para administración y junta.</p>:null}
  {current&&canAdmin?<section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 p-6"><h2 className="text-lg font-bold">Personal registrado</h2><span className="rounded-full bg-sky-50 px-3 py-1 text-sm font-semibold text-sky-800">{staff.count??0} trabajadores</span></div>{staff.error?<p role="alert" className="px-6 pb-6 text-red-700">No fue posible consultar el personal.</p>:staff.data?.length?<div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="bg-slate-50 text-slate-600"><tr>{['Trabajador','Cargo','Área','Turno','Ingreso','Estado'].map(x=><th key={x} className="p-4">{x}</th>)}</tr></thead><tbody>{staff.data.map(x=><tr key={x.id} className="border-t border-slate-100"><td className="p-4 font-semibold">{x.full_name}</td><td className="p-4">{x.cargo||'—'}</td><td className="p-4">{x.area_asignada||'—'}</td><td className="p-4">{x.turno||'—'}</td><td className="p-4">{x.fecha_ingreso||'—'}</td><td className="p-4 capitalize">{x.estado}</td></tr>)}</tbody></table></div>:<p className="px-6 pb-6 text-sm text-slate-500">Aún no hay trabajadores registrados.</p>}</section>:null}
  {canAdmin&&(staff.count??0)>25?<nav className="flex gap-3 text-sm">{page>1?<Link className="rounded-lg border bg-white px-4 py-2" href={'?condominio='+current+'&pagina='+(page-1)}>Anterior</Link>:null}{page*25<(staff.count??0)?<Link className="rounded-lg border bg-white px-4 py-2" href={'?condominio='+current+'&pagina='+(page+1)}>Siguiente</Link>:null}</nav>:null}
