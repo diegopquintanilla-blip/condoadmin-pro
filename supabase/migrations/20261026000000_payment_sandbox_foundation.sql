@@ -22,14 +22,15 @@ create table if not exists public.payment_orders (
  amount_minor bigint not null check (amount_minor between 1 and 999999999),
  currency text not null default 'PEN' check (currency='PEN'),
  status text not null default 'created' check (status in ('created','pending','confirmed','failed','cancelled','expired','refunded')),
- idempotency_key text not null,
+ idempotency_key text not null check (length(idempotency_key) between 8 and 200),
  external_reference text,
  created_at timestamptz not null default now(),
  updated_at timestamptz not null default now(),
  constraint payment_orders_merchant_tenant_fk foreign key (merchant_id,condominio_id) references public.payment_merchants(id,condominio_id),
  constraint payment_orders_recibo_tenant_fk foreign key (condominio_id,recibo_id) references public.recibos(condominio_id,id),
  unique (condominio_id,idempotency_key),
- unique (id,condominio_id)
+ unique (id,condominio_id),
+ unique (id,condominio_id,merchant_id)
 );
 create unique index if not exists payment_orders_external_reference_unique on public.payment_orders(merchant_id,external_reference) where external_reference is not null;
 create index if not exists payment_orders_recibo_status_idx on public.payment_orders(condominio_id,recibo_id,status);
@@ -43,7 +44,7 @@ create table if not exists public.payment_transactions (
  currency text not null default 'PEN' check(currency='PEN'),
  status text not null check(status in ('pending','confirmed','failed','refunded')),
  created_at timestamptz not null default now(),
- constraint payment_transactions_order_fk foreign key (order_id,condominio_id) references public.payment_orders(id,condominio_id),
+ constraint payment_transactions_order_fk foreign key (order_id,condominio_id,merchant_id) references public.payment_orders(id,condominio_id,merchant_id),
  constraint payment_transactions_merchant_fk foreign key (merchant_id,condominio_id) references public.payment_merchants(id,condominio_id)
 );
 create unique index if not exists payment_transactions_provider_id_unique on public.payment_transactions(merchant_id,provider_transaction_id) where provider_transaction_id is not null;
