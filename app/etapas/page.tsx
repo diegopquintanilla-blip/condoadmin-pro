@@ -215,7 +215,8 @@ export default function EtapasPage() {
   }
 
   const handleDeleteEtapa = async (id: string) => {
-    const confirmed = window.confirm('¿Seguro que deseas eliminar esta etapa o núcleo?')
+    const target = etapas.find(item => item.id === id)
+    const confirmed = window.confirm('¿Eliminar definitivamente '+(target?.nombre || 'este registro')+'? Verifica que no existan inmuebles asociados antes de continuar.')
     if (!confirmed) return
 
     setErrorMessage('')
@@ -535,7 +536,7 @@ function NewEtapaModal({
       return
     }
 
-    if (Number(form.total_lotes || 0) < 0) {
+    if (!Number.isSafeInteger(Number(form.total_lotes || 0)) || Number(form.total_lotes || 0) < 0) {
       setError('El total de lotes no puede ser negativo.')
       return
     }

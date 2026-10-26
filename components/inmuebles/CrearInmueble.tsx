@@ -21,6 +21,7 @@ export function CrearInmueble({memberships}:{memberships:Role[]}){
   e.preventDefault();setMessage('')
   if(!allowed.some(x=>x.condominio_id===condominio)){setMessage('No tienes permiso para registrar en ese condominio.');return}
   if(!codigo.trim()||codigo.trim().length>70){setMessage('Ingresa un código válido de hasta 70 caracteres.');return}
+  if([bloque,etapa,torre].some(v=>v.trim().length>100)){setMessage('Las ubicaciones deben tener como máximo 100 caracteres.');return}
   setBusy(true)
   const {error}=await supabase.from('inmuebles').insert({condominio_id:condominio,codigo:codigo.trim(),tipo,bloque:bloque.trim()||null,etapa:etapa.trim()||null,torre:torre.trim()||null})
   setBusy(false)
