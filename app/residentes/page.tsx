@@ -309,20 +309,20 @@ export default function ResidentesPage() {
   }
 
   return (
-    <main className="space-y-8">
-      <section className="rounded-[22px] border border-border/60 bg-card p-6 shadow-sm">
+    <main className="mx-auto max-w-7xl space-y-6">
+      <section className="rounded-[28px] border border-white/10 bg-gradient-to-r from-[#0b2446] via-[#124c71] to-[#087c9e] p-8 text-white shadow-xl">
         <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-center">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1 text-sm font-semibold text-sky-100">
               <Users className="h-4 w-4" />
               Residentes asociados por lote o unidad
             </div>
 
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            <h1 className="text-3xl font-extrabold tracking-tight text-white">
               Residentes & Unidades
             </h1>
 
-            <p className="mt-2 max-w-3xl text-muted-foreground">
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-sky-100">
               Registra propietarios, inquilinos, familiares, apoderados y
               habitantes asociados a un condominio y unidad inmobiliaria. Esta
               pantalla no contiene información demo.
@@ -330,7 +330,7 @@ export default function ResidentesPage() {
           </div>
 
           <Button
-            className="bg-primary hover:bg-primary/90"
+            className="bg-white font-bold text-[#0b2446] hover:bg-sky-50"
             onClick={() => setShowModal(true)}
             disabled={condominios.length === 0}
           >
@@ -386,7 +386,7 @@ export default function ResidentesPage() {
         />
       </section>
 
-      <section className="rounded-[22px] border border-border/60 bg-card p-6 shadow-sm">
+      <section className="rounded-[24px] border border-slate-200/80 bg-white p-6 shadow-[0_15px_36px_-30px_rgba(8,40,75,.4)]">
         <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
           <div className="relative w-full xl:w-[520px]">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -395,7 +395,7 @@ export default function ResidentesPage() {
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="Buscar por nombre, documento, correo, teléfono, lote o condominio..."
-              className="h-11 w-full rounded-xl border border-border bg-background pl-11 pr-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
             />
           </div>
 
@@ -403,7 +403,7 @@ export default function ResidentesPage() {
             <select
               value={condominioFilter}
               onChange={(event) => setCondominioFilter(event.target.value)}
-              className="h-11 rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+              className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
             >
               <option value="todos">Todos los condominios</option>
               {condominios.map((item) => (
@@ -418,7 +418,7 @@ export default function ResidentesPage() {
               onChange={(event) =>
                 setTipoFilter(event.target.value as ResidentType | 'todos')
               }
-              className="h-11 rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+              className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
             >
               <option value="todos">Todos los tipos</option>
               <option value="propietario">Propietario</option>
@@ -433,7 +433,7 @@ export default function ResidentesPage() {
               onChange={(event) =>
                 setEstadoFilter(event.target.value as RecordStatus | 'todos')
               }
-              className="h-11 rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+              className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
             >
               <option value="todos">Todos los estados</option>
               <option value="activo">Activo</option>
@@ -463,10 +463,10 @@ export default function ResidentesPage() {
           onAction={() => setShowModal(true)}
         />
       ) : (
-        <section className="overflow-hidden rounded-[22px] border border-border/60 bg-card shadow-sm">
+        <section className="overflow-hidden rounded-[24px] border border-slate-200/80 bg-white shadow-[0_15px_36px_-30px_rgba(8,40,75,.4)]">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1150px]">
-              <thead className="border-b border-border bg-secondary">
+            <table className="w-full min-w-[1150px] text-sm">
+              <thead className="border-b border-slate-200 bg-slate-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-foreground">
                     Residente
@@ -822,7 +822,7 @@ function SummaryCard({
   }
 
   return (
-    <div className="rounded-[22px] border border-border/60 bg-card p-6 shadow-sm">
+    <div className="rounded-[24px] border border-slate-200/80 bg-white p-6 shadow-[0_15px_36px_-30px_rgba(8,40,75,.4)]">
       <div
         className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${styles[tone]}`}
       >
@@ -985,7 +985,7 @@ function InputField({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
       />
     </div>
   )
@@ -1011,7 +1011,7 @@ function SelectField({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
       >
         {options.map((option) => (
           <option key={`${option.value}-${option.label}`} value={option.value}>
@@ -1045,7 +1045,7 @@ function TextAreaField({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         rows={4}
-        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
+        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
       />
     </div>
   )
