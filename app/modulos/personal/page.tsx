@@ -7,6 +7,7 @@ import {PayrollPreview} from '@/components/personal/PayrollPreview'
 import {EmploymentTerms} from '@/components/personal/EmploymentTerms'
 import {MonthlyAttendance} from '@/components/personal/MonthlyAttendance'
 import {StatutoryContributionsPreview} from '@/components/personal/StatutoryContributionsPreview'
+import {PayrollPeriods} from '@/components/personal/PayrollPeriods'
 export default async function PersonalPage({searchParams}:{searchParams:Promise<{condominio?:string;pagina?:string}>}){
  const db=await createSupabaseServerClient()
  const {data:{user}}=await db.auth.getUser()
@@ -26,6 +27,7 @@ export default async function PersonalPage({searchParams}:{searchParams:Promise<
  return <main className="mx-auto max-w-7xl space-y-6"><header className="rounded-[28px] bg-gradient-to-r from-[#0b2446] to-[#087c9e] p-8 text-white shadow-lg"><Link href="/dashboard" className="inline-flex items-center gap-2 text-sm text-sky-100"><ArrowLeft size={16}/> Volver al dashboard</Link><h1 className="mt-5 flex items-center gap-3 text-3xl font-extrabold"><Users/> Personal</h1><p className="mt-2 text-sm text-sky-100">Gestiona trabajadores, cargos y turnos. Simula remuneraciones y honorarios antes de preparar la planilla.</p></header>
  {ids.length>1?<nav className="flex flex-wrap gap-2">{ids.map(id=><Link key={id} href={'?condominio='+encodeURIComponent(id)} className={'rounded-xl border px-4 py-2 text-sm '+(current===id?'bg-sky-800 text-white':'bg-white text-slate-700')}>{names.get(id)||id.slice(0,8)}</Link>)}</nav>:null}
  {!current?<p className="rounded-xl border bg-white p-5">Primero configura un condominio.</p>:null}
+ {current&&canAdmin?<PayrollPeriods condominioId={current}/>:null}
  {current&&canAdmin?<PayrollPreview/>:null}
  {current&&canAdmin?<StatutoryContributionsPreview/>:null}
  {current&&canAdmin?<MonthlyAttendance condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
