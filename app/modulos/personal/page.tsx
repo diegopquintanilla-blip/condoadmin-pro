@@ -18,7 +18,7 @@ export default async function PersonalPage({searchParams}:{searchParams:Promise<
  const query=await searchParams
  const current=query.condominio&&ids.includes(query.condominio)?query.condominio:ids[0]
  const page=Math.max(1,Math.min(10000,Number.parseInt(query.pagina||'1',10)||1))
- const canAdmin=members?.some(x=>String(x.condominio_id)===current&&['super_admin','admin','junta'].includes(String(x.role)))??false
+ const canAdmin=members?.some(x=>String(x.condominio_id)===current&&['super_admin','admin'].includes(String(x.role)))??false
  const [condos,staff]=await Promise.all([
   ids.length?db.from('condominios').select('id,nombre').in('id',ids):Promise.resolve({data:[] as {id:string;nombre:string}[]}),
   current&&canAdmin?db.from('personal').select('id,full_name,cargo,area_asignada,turno,fecha_ingreso,estado',{count:'exact'}).eq('condominio_id',current).order('full_name').range((page-1)*25,page*25-1):Promise.resolve({data:[],count:0,error:null})
@@ -32,7 +32,7 @@ export default async function PersonalPage({searchParams}:{searchParams:Promise<
  {current&&canAdmin?<StatutoryContributionsPreview/>:null}
  {current&&canAdmin?<MonthlyAttendance condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
  {current&&canAdmin?<EmploymentTerms condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
- {current&&canAdmin?<RegistrarTrabajador key={current} condominioId={current}/>:current?<p className="rounded-xl bg-amber-50 p-5 text-sm">Los datos laborales están disponibles únicamente para administración y junta.</p>:null}
+ {current&&canAdmin?<RegistrarTrabajador key={current} condominioId={current}/>:current?<p className="rounded-xl bg-amber-50 p-5 text-sm">Los datos laborales están disponibles únicamente para administradores.</p>:null}
  {current&&canAdmin?<section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 p-6"><h2 className="text-lg font-bold">Personal registrado</h2><span className="rounded-full bg-sky-50 px-3 py-1 text-sm font-semibold text-sky-800">{staff.count??0} trabajadores</span></div>{staff.error?<p role="alert" className="px-6 pb-6 text-red-700">No fue posible consultar el personal.</p>:staff.data?.length?<div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="bg-slate-50 text-slate-600"><tr>{['Trabajador','Cargo','Área','Turno','Ingreso','Estado'].map(x=><th key={x} className="p-4">{x}</th>)}</tr></thead><tbody>{staff.data.map(x=><tr key={x.id} className="border-t border-slate-100"><td className="p-4 font-semibold">{x.full_name}</td><td className="p-4">{x.cargo||'—'}</td><td className="p-4">{x.area_asignada||'—'}</td><td className="p-4">{x.turno||'—'}</td><td className="p-4">{x.fecha_ingreso||'—'}</td><td className="p-4 capitalize">{x.estado}</td></tr>)}</tbody></table></div>:<p className="px-6 pb-6 text-sm text-slate-500">Aún no hay trabajadores registrados.</p>}</section>:null}
  {canAdmin&&(staff.count??0)>25?<nav className="flex gap-3 text-sm">{page>1?<Link className="rounded-lg border bg-white px-4 py-2" href={'?condominio='+current+'&pagina='+(page-1)}>Anterior</Link>:null}{page*25<(staff.count??0)?<Link className="rounded-lg border bg-white px-4 py-2" href={'?condominio='+current+'&pagina='+(page+1)}>Siguiente</Link>:null}</nav>:null}
  </main>
