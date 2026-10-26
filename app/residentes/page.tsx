@@ -293,9 +293,13 @@ export default function ResidentesPage() {
       ]),
     ]
 
-    const csv = rows
-      .map((row) => row.map((cell) => `"${cell}"`).join(','))
-      .join('\n')
+    // Escape RFC 4180 quotes and prevent spreadsheet formula execution from user-entered text.
+    const safeCell = (value: string) => {
+      const normalized = String(value ?? '')
+      const escaped = ['=', '+', '-', '@'].includes(normalized.trimStart().charAt(0)) ? "'" + normalized : normalized
+      return '"' + escaped.replace(/"/g, '""') + '"'
+    }
+    const csv = '\uFEFF' + rows.map((row) => row.map(safeCell).join(',')).join('\r\n')
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
