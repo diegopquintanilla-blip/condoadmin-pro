@@ -24,16 +24,29 @@ export default async function PersonalPage({searchParams}:{searchParams:Promise<
   ids.length?db.from('condominios').select('id,nombre').in('id',ids):Promise.resolve({data:[] as {id:string;nombre:string}[]}),
   current&&canAdmin?db.from('personal').select('id,full_name,cargo,area_asignada,turno,fecha_ingreso,estado',{count:'exact'}).eq('condominio_id',current).order('full_name').range((page-1)*25,page*25-1):Promise.resolve({data:[],count:0,error:null})
  ])
+ const roster:{id:string;full_name:string}[]=[]
+ let rosterError=false
+ if(current&&canAdmin){
+  for(let offset=0;offset<5000;offset+=500){
+   const result=await db.from('personal').select('id,full_name').eq('condominio_id',current).order('full_name').range(offset,offset+499)
+   if(result.error){rosterError=true;break}
+   const batch=(result.data??[]) as {id:string;full_name:string}[]
+   roster.push(...batch)
+   if(batch.length<500)break
+  }
+ }
+ const eligibleStaff=rosterError||(staff.count??0)>roster.length?[]:roster
  const names=new Map((condos.data??[]).map(x=>[String(x.id),String(x.nombre)]))
  return <main className="mx-auto max-w-7xl space-y-6"><header className="rounded-[28px] bg-gradient-to-r from-[#0b2446] to-[#087c9e] p-8 text-white shadow-lg"><Link href="/dashboard" className="inline-flex items-center gap-2 text-sm text-sky-100"><ArrowLeft size={16}/> Volver al dashboard</Link><h1 className="mt-5 flex items-center gap-3 text-3xl font-extrabold"><Users/> Personal</h1><p className="mt-2 text-sm text-sky-100">Gestiona trabajadores, cargos y turnos. Simula remuneraciones y honorarios antes de preparar la planilla.</p></header>
  {ids.length>1?<nav className="flex flex-wrap gap-2">{ids.map(id=><Link key={id} href={'?condominio='+encodeURIComponent(id)} className={'rounded-xl border px-4 py-2 text-sm '+(current===id?'bg-sky-800 text-white':'bg-white text-slate-700')}>{names.get(id)||id.slice(0,8)}</Link>)}</nav>:null}
  {!current?<p className="rounded-xl border bg-white p-5">Primero configura un condominio.</p>:null}
+ {current&&canAdmin&&((staff.count??0)>roster.length||rosterError)?<p role="alert" className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">No se pudo cargar el padrón completo de trabajadores. Se deshabilitan las operaciones de planilla y asistencia hasta resolverlo para evitar omisiones.</p>:null}
  {current&&canAdmin?<HonorariosRegister condominioId={current}/>:null}
- {current&&canAdmin?<PayrollPeriods condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
+ {current&&canAdmin?<PayrollPeriods condominioId={current} staff={eligibleStaff}/>:null}
  {current&&canAdmin?<PayrollPreview/>:null}
  {current&&canAdmin?<StatutoryContributionsPreview/>:null}
- {current&&canAdmin?<MonthlyAttendance condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
- {current&&canAdmin?<EmploymentTerms condominioId={current} staff={(staff.data??[]).map(x=>({id:x.id,full_name:x.full_name}))}/>:null}
+ {current&&canAdmin?<MonthlyAttendance condominioId={current} staff={eligibleStaff}/>:null}
+ {current&&canAdmin?<EmploymentTerms condominioId={current} staff={eligibleStaff}/>:null}
  {current&&canAdmin?<RegistrarTrabajador key={current} condominioId={current}/>:current?<p className="rounded-xl bg-amber-50 p-5 text-sm">Los datos laborales están disponibles únicamente para administradores.</p>:null}
  {current&&canAdmin?<section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 p-6"><h2 className="text-lg font-bold">Personal registrado</h2><span className="rounded-full bg-sky-50 px-3 py-1 text-sm font-semibold text-sky-800">{staff.count??0} trabajadores</span></div>{staff.error?<p role="alert" className="px-6 pb-6 text-red-700">No fue posible consultar el personal.</p>:staff.data?.length?<div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="bg-slate-50 text-slate-600"><tr>{['Trabajador','Cargo','Área','Turno','Ingreso','Estado'].map(x=><th key={x} className="p-4">{x}</th>)}</tr></thead><tbody>{staff.data.map(x=><tr key={x.id} className="border-t border-slate-100"><td className="p-4 font-semibold">{x.full_name}</td><td className="p-4">{x.cargo||'—'}</td><td className="p-4">{x.area_asignada||'—'}</td><td className="p-4">{x.turno||'—'}</td><td className="p-4">{x.fecha_ingreso||'—'}</td><td className="p-4 capitalize">{x.estado}</td></tr>)}</tbody></table></div>:<p className="px-6 pb-6 text-sm text-slate-500">Aún no hay trabajadores registrados.</p>}</section>:null}
  {canAdmin&&(staff.count??0)>25?<nav className="flex gap-3 text-sm">{page>1?<Link className="rounded-lg border bg-white px-4 py-2" href={'?condominio='+current+'&pagina='+(page-1)}>Anterior</Link>:null}{page*25<(staff.count??0)?<Link className="rounded-lg border bg-white px-4 py-2" href={'?condominio='+current+'&pagina='+(page+1)}>Siguiente</Link>:null}</nav>:null}
