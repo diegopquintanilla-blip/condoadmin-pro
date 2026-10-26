@@ -1,5 +1,5 @@
 'use client'
-import {useState} from 'react'
+import {useEffect,useRef,useState} from 'react'
 import {CheckCheck,Check} from 'lucide-react'
 import {supabase} from '@/lib/supabase/client'
 type Notice={id:string;ticket_id:string;event_type:string;created_at:string;read_at:string|null}
@@ -22,6 +22,14 @@ export function NotificationList({initial}:{initial:Notice[]}){
    window.dispatchEvent(new Event('support-notifications-updated'))
   }catch{setError('No se pudo conectar con el servidor.')}finally{setBusy(false)}
  }
+ const hasAcknowledged=useRef(false)
+ useEffect(()=>{
+  if(hasAcknowledged.current)return
+  hasAcknowledged.current=true
+  const ids=initial.filter(item=>!item.read_at).map(item=>item.id)
+  if(ids.length)void mark(ids)
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ },[])
  const unread=items.filter(x=>!x.read_at)
  return <div className="space-y-4">
   <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm text-slate-600">{unread.length} sin leer</p><button type="button" disabled={busy||!unread.length} onClick={()=>void mark(unread.map(x=>x.id))} className="inline-flex items-center gap-2 rounded-xl bg-sky-800 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"><CheckCheck size={16}/> Marcar todas como leídas</button></div>
