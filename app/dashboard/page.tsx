@@ -10,6 +10,7 @@ export default async function DashboardPage({searchParams}:{searchParams:Promise
  if(!user)redirect('/login')
  const {data:memberships,error}=await client.from('condominio_usuarios').select('condominio_id').eq('user_id',user.id).eq('is_active',true)
  const ids=(memberships??[]).map(x=>String(x.condominio_id))
+ const {data:commercialAdmin}=await client.from('prospectos_admins').select('user_id').eq('user_id',user.id).maybeSingle()
  const {data:condos}=ids.length?await client.from('condominios').select('id,nombre').in('id',ids):{data:[] as {id:string;nombre:string}[]}
  const names=new Map((condos??[]).map(x=>[String(x.id),String(x.nombre)]))
  const requested=(await searchParams).condominio
@@ -31,6 +32,7 @@ export default async function DashboardPage({searchParams}:{searchParams:Promise
  {id&&!error?<section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm"><h2 className="text-lg font-bold text-slate-900">Empieza a operar tu condominio</h2><p className="mt-1 text-sm text-slate-500">Ruta recomendada para tus primeros registros reales.</p><div className="mt-5 grid gap-3 md:grid-cols-3">{[{label:'1. Registrar inmuebles',href:'/bloques-inmobiliarios',Icon:House},{label:'2. Emitir recibos',href:'/finanzas?condominio='+encodeURIComponent(id),Icon:Receipt},{label:'3. Registrar pagos',href:'/finanzas?condominio='+encodeURIComponent(id),Icon:Wallet}].map(({label,href,Icon})=><Link key={label} href={href} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-800 hover:border-sky-300 hover:bg-sky-50"><Icon size={20} className="text-sky-700"/>{label}<ArrowRight size={16} className="ml-auto text-slate-400"/></Link>)}</div></section>:null}
  {id?<div className="flex flex-wrap gap-2">{ids.map(x=><Link key={x} href={'/dashboard?condominio='+encodeURIComponent(x)} className={`rounded-lg border px-3 py-2 text-sm ${id===x?'border-sky-700 bg-sky-700 text-white':'bg-white text-slate-700'}`}>{names.get(x)??'Condominio '+x.slice(0,8)}</Link>)}</div>:null}
  {loadFailed?<section role="alert" className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800">No se pudieron cargar las métricas. Comprueba los permisos de Supabase.</section>:null}
+ {commercialAdmin?<Link href="/administracion/prospectos" className="inline-flex rounded-xl bg-[#1f4b7a] px-5 py-3 font-bold text-white">Ver prospectos comerciales</Link>:null}
  <ExecutiveDashboard overview={overview} history={history} configured={Boolean(id&&!error&&!loadFailed)}/>
  </main>
 }
