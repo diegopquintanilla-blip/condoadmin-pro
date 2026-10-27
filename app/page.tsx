@@ -1,3 +1,4 @@
+import {ProspectForm} from '@/components/marketing/ProspectForm'
 import Link from 'next/link'
 import {
   ArrowRight,
@@ -240,18 +241,7 @@ export default function HomePage() {
                 condominio.
               </p>
 
-              <div className="mt-6 space-y-3">
-                <ContactRow icon={Mail} label="Correo administrativo" />
-                <ContactRow icon={Phone} label="Contacto comercial" />
-                <ContactRow icon={Building2} label="Demo para condominios" />
-              </div>
-
-              <Link
-                href="/login"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-[#1f4b7a] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#173a60]"
-              >
-                Ingresar a la plataforma
-              </Link>
+              <ProspectForm/>
             </div>
           </div>
         </div>
