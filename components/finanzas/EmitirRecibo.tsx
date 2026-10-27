@@ -19,9 +19,9 @@ export function EmitirRecibo({condominioId,properties,canEdit}:{condominioId:str
   if(!properties.some(p=>p.id===inmueble)||!/^\d{4}-(0[1-9]|1[0-2])$/.test(periodo)||!Number.isFinite(amount)||amount<=0||amount>1e9||!/^\d{4}-\d{2}-\d{2}$/.test(vencimiento)){setNotice('Verifica inmueble, período, importe y fecha.');return}
   setBusy(true)
   const date=new Date().toISOString().slice(0,10)
-  const {error}=await supabase.from('recibos').insert({condominio_id:condominioId,inmueble_id:inmueble,periodo,concepto:'Mantenimiento',codigo:'MANT-'+periodo+'-'+inmueble.slice(0,8),fecha_emision:date,fecha_vencimiento:vencimiento,subtotal:amount,mora:0,total:amount,monto:amount,estado:'pendiente'})
+  const {data,error}=await supabase.from('recibos').insert({condominio_id:condominioId,inmueble_id:inmueble,periodo,concepto:'Mantenimiento',codigo:'MANT-'+periodo+'-'+inmueble.slice(0,8),fecha_emision:date,fecha_vencimiento:vencimiento,subtotal:amount,mora:0,total:amount,monto:amount,estado:'pendiente'}).select('id,condominio_id,inmueble_id,periodo,estado').single()
   setBusy(false)
-  if(error){setNotice(error.code==='23505'?'Ya existe un recibo de mantenimiento para ese inmueble y período.':'No se pudo emitir el recibo. Comprueba permisos y datos.');return}
+  if(error||!data||data.condominio_id!==condominioId||data.inmueble_id!==inmueble||data.periodo!==periodo||data.estado!=='pendiente'){setNotice(error?.code==='23505'?'Ya existe un recibo de mantenimiento para ese inmueble y período.':'No se pudo confirmar la emisión. Consulta el historial antes de volver a intentar.');return}
   setNotice('Recibo emitido correctamente.');router.refresh()
  }
  return <section className="rounded-2xl border bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><ReceiptText className="text-sky-700"/><div><h2 className="text-xl font-bold">Emitir recibo de mantenimiento</h2><p className="text-sm text-slate-500">Emisión manual, sin cargos automáticos ni procesamiento bancario.</p></div></div>
