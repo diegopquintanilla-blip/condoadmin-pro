@@ -43,6 +43,7 @@ export default function HomePage() {
             <a href="#modulos" className="transition hover:text-[#1f4b7a]">
               Módulos
             </a>
+            <Link href="/demo" className="transition hover:text-[#1f4b7a]">Demo 7 días</Link>
             <a href="#contacto" className="transition hover:text-[#1f4b7a]">
               Contacto
             </a>
@@ -81,9 +82,9 @@ export default function HomePage() {
               Centraliza inmuebles, residentes, recibos, incidencias y comunicados. Una experiencia más ordenada para administradoras, juntas directivas y comunidades residenciales.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <a href="#contacto" className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-3.5 text-sm font-extrabold text-[#071a32] shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-300">
-                Solicitar una demostración <ArrowRight className="h-4 w-4"/>
-              </a>
+              <Link href="/demo" className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-3.5 text-sm font-extrabold text-[#071a32] shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-300">
+                Prueba gratis por 7 días <ArrowRight className="h-4 w-4"/>
+              </Link>
               <Link href="/login" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/20">
                 Acceso a clientes
               </Link>
