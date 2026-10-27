@@ -1,0 +1,12 @@
+import Link from 'next/link'
+import {redirect} from 'next/navigation'
+import {createSupabaseServerClient} from '@/lib/supabase/server'
+export default async function DemoPanel(){
+ const db=await createSupabaseServerClient()
+ const {data:{user}}=await db.auth.getUser()
+ if(!user)redirect('/login')
+ const {data:trial,error}=await db.from('demo_trials').select('expires_at,started_at').eq('user_id',user.id).maybeSingle()
+ if(error||!trial)return <main className="mx-auto max-w-3xl p-8"><h1 className="text-2xl font-bold">Demo no disponible</h1><p className="mt-3">No hay una evaluación habilitada para esta cuenta.</p><Link href="/" className="mt-4 inline-block underline">Volver al inicio</Link></main>
+ const expired=new Date(trial.expires_at).getTime()<=Date.now()
+ return <main className="min-h-screen bg-slate-50 p-6"><div className="mx-auto max-w-4xl space-y-6"><header className="rounded-3xl bg-[#102d50] p-9 text-white"><p className="text-xs uppercase tracking-widest text-cyan-200">Condomin-Pro · Demostración</p><h1 className="mt-3 text-3xl font-extrabold">{expired?'Tu demo ha finalizado':'Bienvenido a tu demo'}</h1><p className="mt-3 text-sky-100">{expired?'El periodo gratuito terminó. No es posible activar otra prueba con el mismo correo.':'Acceso habilitado hasta el '+new Date(trial.expires_at).toLocaleString('es-PE',{timeZone:'America/Lima',dateStyle:'long'})+'.'}</p></header>{!expired?<section className="rounded-2xl border bg-white p-7"><h2 className="text-xl font-bold">Explora las funcionalidades</h2><p className="mt-3 text-slate-600">Recorrido informativo de residentes, inmuebles, finanzas, mantenimiento y comunicaciones. Esta evaluación no crea ni expone registros reales de otros clientes.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{['Residentes e inmuebles','Recibos y pagos','Personal y mantenimiento','Comunicaciones y tickets'].map(x=><div key={x} className="rounded-xl border bg-slate-50 p-5 font-semibold">{x}</div>)}</div></section>:null}<section className="rounded-2xl border bg-white p-6"><p className="font-semibold">¿Quieres una demostración guiada o activar tu condominio?</p><Link href="/#contacto" className="mt-3 inline-block rounded-xl bg-sky-800 px-5 py-3 font-bold text-white">Contactar al equipo</Link></section></div></main>
+}
