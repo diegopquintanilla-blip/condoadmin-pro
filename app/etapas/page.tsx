@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase/client'
 import {
@@ -796,10 +797,10 @@ function ModalLayout({
   onClose: () => void
   children: React.ReactNode
 }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-border bg-card shadow-2xl">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card p-6">
+  return createPortal(
+    <div role="presentation" className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 sm:p-6">
+      <div role="dialog" aria-modal="true" aria-label={title} className="max-h-[calc(100dvh-2rem)] w-full max-w-4xl overflow-y-auto rounded-2xl border border-border bg-white text-slate-900 shadow-2xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white p-6">
           <div>
             <h2 className="text-2xl font-bold text-foreground">{title}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
@@ -816,7 +817,8 @@ function ModalLayout({
 
         <div className="p-6">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
