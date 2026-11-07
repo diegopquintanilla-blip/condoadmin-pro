@@ -224,6 +224,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section aria-labelledby="soluciones-heading" className="border-t border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <h2 id="soluciones-heading" className="text-3xl font-extrabold text-slate-950">Soluciones para cada comunidad</h2>
+          <p className="mt-3 max-w-2xl text-slate-600">Conoce cómo organizar la gestión administrativa según el tipo de inmueble que administras.</p>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <Link href="/software-administracion-condominios" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:border-[#1f4b7a] hover:shadow-md">
+              <h3 className="text-xl font-bold text-[#1f4b7a]">Software para administración de condominios</h3>
+              <p className="mt-3 text-slate-600">Organiza residentes, inmuebles, recibos, incidencias y comunicación.</p>
+              <span className="mt-5 inline-flex items-center gap-2 font-semibold text-[#1f4b7a]">Conocer la solución <ArrowRight className="h-4 w-4"/></span>
+            </Link>
+            <Link href="/gestion-edificios-residenciales" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:border-[#1f4b7a] hover:shadow-md">
+              <h3 className="text-xl font-bold text-[#1f4b7a]">Gestión de edificios residenciales</h3>
+              <p className="mt-3 text-slate-600">Unidades, residentes, mantenimiento y seguimiento administrativo.</p>
+              <span className="mt-5 inline-flex items-center gap-2 font-semibold text-[#1f4b7a]">Conocer la solución <ArrowRight className="h-4 w-4"/></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section id="contacto" className="mx-auto max-w-7xl px-6 py-20">
         <div className="rounded-[2rem] bg-[#1f4b7a] p-8 text-white shadow-2xl shadow-slate-300/40 lg:p-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
