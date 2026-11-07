@@ -81,9 +81,11 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="hidden rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 sm:inline-flex"
+              className="inline-flex rounded-xl px-2 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 sm:px-4 sm:text-sm"
+              aria-label="Iniciar sesión de cliente"
             >
-              Acceso a clientes
+              <span className="sm:hidden">Ingresar</span>
+              <span className="hidden sm:inline">Acceso a clientes</span>
             </Link>
 
             <Link
