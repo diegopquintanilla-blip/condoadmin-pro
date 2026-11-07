@@ -83,14 +83,14 @@ export default function HomePage() {
               href="/login"
               className="hidden rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 sm:inline-flex"
             >
-              Iniciar sesión
+              Acceso a clientes
             </Link>
 
             <Link
-              href="/login"
+              href="/demo"
               className="rounded-xl bg-[#1f4b7a] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#173a60]"
             >
-              Acceder
+              Probar demo gratis
             </Link>
           </div>
         </div>
