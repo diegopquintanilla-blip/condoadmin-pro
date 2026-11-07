@@ -22,9 +22,32 @@ import {
   WalletCards,
 } from 'lucide-react'
 
+const softwareStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'CondominPro',
+  url: 'https://condominpro.com',
+  description: 'Plataforma web para la gestión administrativa de edificios y condominios en Perú: residentes, inmuebles, recibos, incidencias y comunicados.',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  inLanguage: 'es-PE',
+  featureList: [
+    'Gestión de residentes e inmuebles',
+    'Registro y seguimiento de recibos y pagos reportados',
+    'Gestión administrativa de incidencias',
+    'Comunicados y documentación',
+  ],
+} as const
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#f5f8fb] text-[#152033]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(softwareStructuredData).replace(/</g, '\\u003c'),
+        }}
+      />
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-3">
