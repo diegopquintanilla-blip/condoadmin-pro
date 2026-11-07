@@ -1,3 +1,9 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
+
 import {ProspectForm} from '@/components/marketing/ProspectForm'
 import Link from 'next/link'
 import {
