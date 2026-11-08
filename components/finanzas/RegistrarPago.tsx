@@ -20,6 +20,13 @@ export function RegistrarPago({condominioId,recibos}:{condominioId:string;recibo
   const amount=Number(monto)
   if(!eligible.some(x=>x.id===recibo)||!Number.isFinite(amount)||amount<=0||amount>1000000000||!/^\d{4}-\d{2}-\d{2}$/.test(fecha)||operacion.trim().length>100){setMessage('Verifica el recibo, importe, fecha y operación.');return}
   setBusy(true)
+  // Best-effort duplicate reference check. Database-side uniqueness is still needed
+  // to prevent simultaneous submissions from racing.
+  if(operacion.trim()){
+   const {data:existing,error:lookupError}=await supabase.from('pagos').select('id').eq('condominio_id',condominioId).eq('metodo',metodo).eq('numero_operacion',operacion.trim()).neq('estado','rechazado').limit(1)
+   if(lookupError){setMessage('No se pudo verificar si la operación ya existe. No se registró el pago.');setBusy(false);return}
+   if(existing?.length){setMessage('Ya hay un pago reportado con este método y número de operación. Revisa el historial antes de duplicarlo.');setBusy(false);return}
+  }
   const {data,error}=await supabase.from('pagos').insert({condominio_id:condominioId,recibo_id:recibo,monto:amount,metodo,fecha_pago:fecha,numero_operacion:operacion.trim()||null,estado:'pendiente_validar'}).select('id,condominio_id,recibo_id,estado').single()
   setBusy(false)
   if(error||!data||data.condominio_id!==condominioId||data.recibo_id!==recibo||data.estado!=='pendiente_validar'){setMessage(error?.code==='23505'?'Ya existe una operación registrada con esa referencia.':'No se pudo confirmar el pago pendiente. Verifica los permisos y consulta el historial antes de volver a intentar.');return}
