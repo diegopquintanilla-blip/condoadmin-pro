@@ -4,6 +4,7 @@ import {ArrowRight,Building2,House,Receipt,Wallet} from 'lucide-react'
 import {createSupabaseServerClient} from '@/lib/supabase/server'
 import {loadCondoDashboard} from '@/lib/dashboard/dashboard-metrics'
 import {ExecutiveDashboard} from '@/components/dashboard/ExecutiveDashboard'
+import {AvisoCupo} from '@/components/planes/AvisoCupo'
 export default async function DashboardPage({searchParams}:{searchParams:Promise<{condominio?:string}>}){
  const client=await createSupabaseServerClient()
  const {data:{user}}=await client.auth.getUser()
@@ -15,6 +16,7 @@ export default async function DashboardPage({searchParams}:{searchParams:Promise
  const names=new Map((condos??[]).map(x=>[String(x.id),String(x.nombre)]))
  const requested=(await searchParams).condominio
  const id=requested&&ids.includes(requested)?requested:ids[0]
+ const {data:cupo}=id&&!error?await client.from('cupos_unidades').select('usadas,limite').eq('condominio_id',id).maybeSingle():{data:null}
  let overview:Record<string,unknown>={}
  let history:Record<string,unknown>[]=[]
  let loadFailed=false
@@ -31,6 +33,7 @@ export default async function DashboardPage({searchParams}:{searchParams:Promise
  {!error&&!id?<section className="rounded-[26px] border border-sky-200 bg-white p-7 shadow-sm md:p-9"><div className="flex items-start gap-4"><div className="rounded-2xl bg-sky-100 p-3 text-sky-800"><Building2 size={26}/></div><div><p className="text-xs font-bold uppercase tracking-widest text-sky-700">Activación inicial</p><h2 className="mt-2 text-2xl font-extrabold text-slate-900">Tu condominio está a un paso</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Registra el nombre oficial de tu primer condominio para activar la gestión de inmuebles, residentes y finanzas. No se crearán datos de prueba.</p><Link className="mt-5 inline-flex items-center gap-2 rounded-xl bg-sky-800 px-6 py-3 text-sm font-bold text-white hover:bg-sky-900" href="/configuracion-inicial">Configurar mi condominio <ArrowRight size={17}/></Link></div></div></section>:null}
  {id&&!error?<section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm"><h2 className="text-lg font-bold text-slate-900">Empieza a operar tu condominio</h2><p className="mt-1 text-sm text-slate-500">Ruta recomendada para tus primeros registros reales.</p><div className="mt-5 grid gap-3 md:grid-cols-3">{[{label:'1. Registrar inmuebles',href:'/bloques-inmobiliarios',Icon:House},{label:'2. Emitir recibos',href:'/finanzas?condominio='+encodeURIComponent(id),Icon:Receipt},{label:'3. Registrar pagos',href:'/finanzas?condominio='+encodeURIComponent(id),Icon:Wallet}].map(({label,href,Icon})=><Link key={label} href={href} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-800 hover:border-sky-300 hover:bg-sky-50"><Icon size={20} className="text-sky-700"/>{label}<ArrowRight size={16} className="ml-auto text-slate-400"/></Link>)}</div></section>:null}
  {id?<div className="flex flex-wrap gap-2">{ids.map(x=><Link key={x} href={'/dashboard?condominio='+encodeURIComponent(x)} className={`rounded-lg border px-3 py-2 text-sm ${id===x?'border-sky-700 bg-sky-700 text-white':'bg-white text-slate-700'}`}>{names.get(x)??'Condominio '+x.slice(0,8)}</Link>)}</div>:null}
+ {cupo&&cupo.usadas>=cupo.limite?<AvisoCupo limite={cupo.limite}/>:null}
  {loadFailed?<section role="alert" className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800">No se pudieron cargar las métricas. Comprueba los permisos de Supabase.</section>:null}
  {commercialAdmin?<Link href="/administracion/prospectos" className="inline-flex rounded-xl bg-[#1f4b7a] px-5 py-3 font-bold text-white">Ver prospectos comerciales</Link>:null}
  <ExecutiveDashboard overview={overview} history={history} configured={Boolean(id&&!error&&!loadFailed)}/>
