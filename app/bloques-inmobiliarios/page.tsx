@@ -17,7 +17,7 @@ export default async function BloquesPage({searchParams}:{searchParams:Promise<{
  const {data:condos}=ids.length?await client.from('condominios').select('id,nombre').in('id',ids):{data:[] as {id:string;nombre:string}[]}
  const condoNames=new Map((condos??[]).map(x=>[String(x.id),String(x.nombre)]))
  const selected=filters.condominio&&ids.includes(filters.condominio)?filters.condominio:ids[0]
- const {data:cupos}=ids.length?await client.from('cupos_unidades').select('condominio_id,usadas,limite').in('condominio_id',ids):{data:[]}
+ const {data:cupos}=ids.length?await client.from('cupos_acciones').select('condominio_id,usadas,limite').in('condominio_id',ids):{data:[]}
  const cuposPorCondominio=new Map((cupos??[]).map(x=>[String(x.condominio_id),{usadas:Number(x.usadas),limite:Number(x.limite)}]))
  const scoped=selected?[selected]:[]
  let propertyQuery=client.from('inmuebles').select('id,condominio_id,codigo,tipo,etapa,torre,bloque,estado',{count:'exact'}).eq('condominio_id',selected||'00000000-0000-0000-0000-000000000000')

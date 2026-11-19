@@ -19,29 +19,28 @@ export function CrearInmueble({memberships,condominioInicial}:{memberships:Role[
  const [rechazado,setRechazado]=useState('')
  const cupo=allowed.find(x=>x.condominio_id===condominio)?.cupo
  const lleno=cupo?cupo.usadas>=cupo.limite:rechazado===condominio
- const ocupaCupo=!['estacionamiento','deposito'].includes(tipo)
  const [message,setMessage]=useState('')
  if(!allowed.length)return null
  async function submit(e:FormEvent<HTMLFormElement>){
   e.preventDefault();setMessage('')
-  if(lleno&&ocupaCupo)return
+  if(lleno)return
   if(!allowed.some(x=>x.condominio_id===condominio)){setMessage('No tienes permiso para registrar en ese condominio.');return}
   if(!codigo.trim()||codigo.trim().length>70){setMessage('Ingresa un código válido de hasta 70 caracteres.');return}
   if([bloque,etapa,torre].some(v=>v.trim().length>100)){setMessage('Las ubicaciones deben tener como máximo 100 caracteres.');return}
   setBusy(true)
   const {data,error}=await supabase.from('inmuebles').insert({condominio_id:condominio,codigo:codigo.trim(),tipo,bloque:bloque.trim()||null,etapa:etapa.trim()||null,torre:torre.trim()||null}).select('id,condominio_id').single()
   setBusy(false)
-  if(error?.message==='LIMITE_UNIDADES_ALCANZADO'){setRechazado(condominio);setMessage('Se alcanzó el límite de unidades.');router.refresh();return}
+  if(error?.message==='LIMITE_ACCIONES_ALCANZADO'){setRechazado(condominio);setMessage('Se alcanzó el límite de acciones.');router.refresh();return}
   if(error||!data||data.condominio_id!==condominio){setMessage(error?.code==='23505'?'Ya existe un inmueble con ese código.':'No se pudo confirmar el registro del inmueble. Revisa los permisos e intenta actualizar la página.');return}
   setCodigo('');setBloque('');setEtapa('');setTorre('');setMessage('Inmueble registrado correctamente.');router.refresh()
  }
- return <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><Plus className="text-sky-700"/><div><h2 className="text-xl font-bold">Registrar inmueble</h2><p className="text-sm text-slate-500">Registro real protegido por permisos del condominio</p></div></div>{cupo&&<div className="mb-4 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-slate-700"><p className="font-semibold text-sky-900">Cupo del plan · {cupo.usadas} de {cupo.limite} unidades usadas</p><p className="mt-1">Cuentan departamentos, casas, lotes y locales. Los estacionamientos y depósitos se muestran en el inventario y no consumen cupo.</p></div>}{lleno&&<div className="mb-4"><AvisoCupo limite={cupo?.limite}/></div>}<form onSubmit={submit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+ return <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div className="mb-5 flex items-center gap-3"><Plus className="text-sky-700"/><div><h2 className="text-xl font-bold">Registrar inmueble</h2><p className="text-sm text-slate-500">Registro real protegido por permisos del condominio</p></div></div>{cupo&&<div className="mb-4 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-slate-700"><p className="font-semibold text-sky-900">Cupo del plan · {cupo.usadas} de {cupo.limite} acciones usadas</p><p className="mt-1">Crear, editar o eliminar registros consume el cupo compartido del condominio. Las consultas no consumen acciones.</p></div>}{lleno&&<div className="mb-4"><AvisoCupo limite={cupo?.limite}/></div>}<form onSubmit={submit} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
  <label className="text-sm font-semibold">Condominio<select className="mt-2 w-full rounded-xl border p-3" value={condominio} onChange={e=>setCondominio(e.target.value)}>{allowed.map(x=><option key={x.condominio_id} value={x.condominio_id}>{x.nombre}</option>)}</select></label>
  <label className="text-sm font-semibold">Código de inmueble *<input required maxLength={70} value={codigo} onChange={e=>setCodigo(e.target.value)} className="mt-2 w-full rounded-xl border p-3" placeholder="Ej. A-101"/></label>
  <label className="text-sm font-semibold">Tipo<select value={tipo} onChange={e=>setTipo(e.target.value)} className="mt-2 w-full rounded-xl border p-3">{tipos.map(x=><option key={x}>{x}</option>)}</select></label>
  <label className="text-sm font-semibold">Bloque<input maxLength={100} value={bloque} onChange={e=>setBloque(e.target.value)} className="mt-2 w-full rounded-xl border p-3" placeholder="Opcional"/></label>
  <label className="text-sm font-semibold">Etapa<input maxLength={100} value={etapa} onChange={e=>setEtapa(e.target.value)} className="mt-2 w-full rounded-xl border p-3" placeholder="Opcional"/></label>
  <label className="text-sm font-semibold">Torre<input maxLength={100} value={torre} onChange={e=>setTorre(e.target.value)} className="mt-2 w-full rounded-xl border p-3" placeholder="Opcional"/></label>
- <div className="sm:col-span-2 lg:col-span-3 flex flex-wrap items-center gap-4"><button disabled={busy||(lleno&&ocupaCupo)} className="inline-flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-3 font-semibold text-white disabled:opacity-50">{busy?<Loader2 size={17} className="animate-spin"/>:<Plus size={17}/>} Guardar inmueble</button>{message?<p role="status" className="text-sm text-slate-700">{message}</p>:null}</div>
+ <div className="sm:col-span-2 lg:col-span-3 flex flex-wrap items-center gap-4"><button disabled={busy||(lleno)} className="inline-flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-3 font-semibold text-white disabled:opacity-50">{busy?<Loader2 size={17} className="animate-spin"/>:<Plus size={17}/>} Guardar inmueble</button>{message?<p role="status" className="text-sm text-slate-700">{message}</p>:null}</div>
  </form></section>
 }
