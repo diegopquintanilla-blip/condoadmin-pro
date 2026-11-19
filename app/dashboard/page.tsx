@@ -53,6 +53,6 @@ export default async function DashboardPage({searchParams}:{searchParams:Promise
  {cupo&&cupo.usadas>=cupo.limite?<AvisoCupo limite={cupo.limite}/>:null}
  {loadFailed?<section role="alert" className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-800">No se pudieron cargar las métricas. Comprueba los permisos de Supabase.</section>:null}
  {commercialAdmin?<Link href="/administracion/prospectos" className="inline-flex rounded-xl bg-[#1f4b7a] px-5 py-3 font-bold text-white">Ver prospectos comerciales</Link>:null}
- <ExecutiveDashboard overview={overview} history={history} configured={Boolean(id&&!error&&!loadFailed)}/>
+ <ExecutiveDashboard condominio={id} overview={overview} history={history} configured={Boolean(id&&!error&&!loadFailed)}/>
  </main>
 }
