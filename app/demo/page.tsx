@@ -1,39 +1,132 @@
 'use client'
+
 import {useState} from 'react'
 import Link from 'next/link'
-import {Building2,Users,Wallet,ClipboardList,ChartColumn,ArrowRight,ShieldCheck} from 'lucide-react'
-const sections=[
- {id:'dashboard',name:'Dashboard',Icon:ChartColumn},
- {id:'residentes',name:'Residentes',Icon:Users},
- {id:'finanzas',name:'Finanzas',Icon:Wallet},
- {id:'operaciones',name:'Operaciones',Icon:ClipboardList},
+import {Archive, ArrowRight, Bike, Boxes, Building2, CalendarDays, CarFront, ChartColumn, Gamepad2, House, IdCard, Landmark, Layers3, LayoutDashboard, ListTodo, Mail, Menu, MessagesSquare, PawPrint, ShieldCheck, Users, Vote, Wallet, Wrench, X} from 'lucide-react'
+
+const grupos=[
+ {titulo:'General',items:[['dashboard','Dashboard',LayoutDashboard],['tareas','Tareas',ListTodo]]},
+ {titulo:'Edificio',items:[
+  ['bloques','Bloques inmobiliarios',Building2],['residentes','Residentes',Users],['mascotas','Mascotas',PawPrint],
+  ['etapas','Etapas',Layers3],['torres','Torres',Landmark],['inmuebles','Inmuebles',House],
+  ['estacionamientos','Estacionamientos',CarFront],['vehiculos','Vehículos',Bike],['depositos','Depósitos',Archive],
+  ['personal','Personal',IdCard],['acceso','Control de acceso',ShieldCheck],['mensajeria','Mensajería',Mail],
+ ]},
+ {titulo:'Operaciones',items:[
+  ['servicios','Servicios',Boxes],['finanzas','Finanzas',Wallet],['areas','Áreas comunes',Gamepad2],
+  ['mantenimiento','Mantenimiento',Wrench],['comunicacion','Comunicación',MessagesSquare],
+  ['eventos','Eventos',CalendarDays],['votaciones','Votaciones',Vote],['reportes','Reportes',ChartColumn],
+ ]},
 ] as const
-const cards=[
- {title:'Inmuebles registrados',value:'128',detail:'Unidades en la comunidad'},
- {title:'Recibos pendientes',value:'18',detail:'Pendientes de regularización'},
- {title:'Pagos validados del mes',value:'94',detail:'Operaciones conciliadas'},
- {title:'Incidencias abiertas',value:'6',detail:'Solicitudes en seguimiento'},
+
+type Seccion=(typeof grupos)[number]['items'][number][0]
+type Ejemplo={columnas:readonly string[];filas:readonly (readonly string[])[]}
+
+const ejemplos:Record<Exclude<Seccion,'dashboard'>,Ejemplo>={
+ tareas:{columnas:['Actividad','Responsable','Estado'],filas:[['Revisar comprobantes del mes','Administración','Pendiente'],['Actualizar padrón de residentes','Recepción','En curso']]},
+ bloques:{columnas:['Bloque','Torres','Unidades'],filas:[['Norte','A y B','64'],['Sur','C y D','64']]},
+ residentes:{columnas:['Residente','Unidad','Vínculo'],filas:[['María P.','A-304','Propietaria'],['Carlos R.','B-502','Inquilino'],['Lucía M.','A-108','Propietaria']]},
+ mascotas:{columnas:['Mascota','Unidad','Tipo'],filas:[['Luna','A-304','Perro'],['Milo','B-502','Gato']]},
+ etapas:{columnas:['Etapa','Bloque','Estado'],filas:[['Primera etapa','Norte','Habilitada'],['Segunda etapa','Sur','Habilitada']]},
+ torres:{columnas:['Torre','Bloque','Pisos'],filas:[['Torre A','Norte','8'],['Torre B','Norte','8'],['Torre C','Sur','8']]},
+ inmuebles:{columnas:['Unidad','Torre','Estado'],filas:[['A-304','A','Ocupada'],['B-502','B','Ocupada'],['A-108','A','Ocupada']]},
+ estacionamientos:{columnas:['Espacio','Unidad','Estado'],filas:[['E-012','A-304','Asignado'],['E-013','—','Disponible']]},
+ vehiculos:{columnas:['Vehículo','Unidad','Estacionamiento'],filas:[['Auto gris','A-304','E-012'],['Camioneta blanca','B-502','E-025']]},
+ depositos:{columnas:['Depósito','Unidad','Estado'],filas:[['D-004','A-304','Asignado'],['D-005','—','Disponible']]},
+ personal:{columnas:['Puesto','Turno','Estado'],filas:[['Recepción','Mañana','Activo'],['Mantenimiento','Tarde','Activo']]},
+ acceso:{columnas:['Ingreso','Destino','Estado'],filas:[['Visita autorizada','A-304','Registrado'],['Proveedor de ascensores','Torre B','Programado']]},
+ mensajeria:{columnas:['Asunto','Destinatarios','Estado'],filas:[['Resumen mensual de gestión','Propietarios','Borrador'],['Aviso de mantenimiento','Torre B','Enviado']]},
+ servicios:{columnas:['Servicio','Proveedor','Frecuencia'],filas:[['Limpieza de áreas comunes','Proveedor A','Diaria'],['Mantenimiento de ascensores','Proveedor B','Mensual']]},
+ finanzas:{columnas:['Unidad','Saldo vencido','Seguimiento'],filas:[['A-304','S/ 640','Por contactar'],['B-502','S/ 320','Aviso registrado'],['A-108','S/ 180','Retomar hoy']]},
+ areas:{columnas:['Espacio','Horario de uso','Estado'],filas:[['Sala de reuniones','09:00–21:00','Disponible'],['Zona de parrillas','11:00–20:00','En mantenimiento']]},
+ mantenimiento:{columnas:['Actividad','Ubicación','Estado'],filas:[['Revisión de bombas','Cuarto técnico','Programada'],['Reparación de luminaria','Torre A','En curso']]},
+ comunicacion:{columnas:['Comunicado','Alcance','Estado'],filas:[['Inspección de ascensores','Torre B','Publicado'],['Actualización de horarios','Todo el edificio','Borrador']]},
+ eventos:{columnas:['Evento','Lugar','Estado'],filas:[['Asamblea ordinaria','Sala de reuniones','Programada'],['Jornada de limpieza','Patio central','Realizada']]},
+ votaciones:{columnas:['Consulta','Participación','Estado'],filas:[['Horario de áreas comunes','32 votos','Abierta'],['Presupuesto de jardinería','45 votos','Cerrada']]},
+ reportes:{columnas:['Indicador','Periodo','Resultado'],filas:[['Pagos validados','Octubre','94'],['Recibos pendientes','Octubre','18'],['Incidencias abiertas','Octubre','6']]},
+}
+
+const resumen=[
+ ['Inmuebles registrados','128','Unidades en el edificio'],
+ ['Recibos pendientes','18','Pendientes de regularización'],
+ ['Pagos validados','94','Durante el mes'],
+ ['Incidencias abiertas','6','Solicitudes activas'],
 ]
+const recaudacion=[['May',4800],['Jun',6500],['Jul',5500],['Ago',7800],['Sep',7200],['Oct',9300]] as const
+const soles=new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0})
+
 export default function PublicDemo(){
- const [section,setSection]=useState<(typeof sections)[number]['id']>('dashboard')
- return <main className="min-h-screen bg-[#f1f6fc] text-slate-900">
-  <header className="border-b bg-white"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-4"><Link href="/" className="inline-flex items-center gap-2 font-extrabold text-[#173c65]"><Building2 size={24}/> Condomin-Pro</Link><div className="flex gap-3"><Link className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700" href="/">Volver al inicio</Link><Link className="rounded-xl bg-[#1f4b7a] px-4 py-2 text-sm font-bold text-white" href="/#contacto">Solicitar información</Link></div></div></header>
-  <div className="mx-auto max-w-7xl space-y-7 px-6 py-9">
-   <section className="rounded-[28px] bg-gradient-to-r from-[#102d50] to-[#126284] p-8 text-white md:p-10"><span className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">Demostración abierta · Sin registro</span><h1 className="mt-3 text-3xl font-extrabold md:text-4xl">Explora el dashboard de Condomin-Pro</h1><p className="mt-3 max-w-2xl text-blue-100">Conoce cómo se visualizan los residentes, las finanzas y las operaciones de un condominio. No necesitas crear una cuenta.</p><div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white/15 px-4 py-2 text-sm font-bold"><ShieldCheck size={17}/> Datos ilustrativos · No corresponden a clientes reales</div></section>
-   <div className="grid gap-6 lg:grid-cols-[230px_1fr]">
-    <nav aria-label="Secciones de la demo" className="flex flex-wrap gap-2 self-start rounded-2xl border bg-white p-3 lg:flex-col">{sections.map(x=><button key={x.id} onClick={()=>setSection(x.id)} aria-pressed={section===x.id} className={'flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition '+(section===x.id?'bg-[#1f4b7a] text-white':'text-slate-700 hover:bg-slate-100')}><x.Icon size={18}/>{x.name}</button>)}</nav>
-    <div className="space-y-5">
-    {section==='dashboard'?<><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{cards.map(c=><div key={c.title} className="rounded-2xl border bg-white p-5 shadow-sm"><p className="text-sm text-slate-500">{c.title}</p><p className="mt-3 text-4xl font-extrabold text-[#173c65]">{c.value}</p><p className="mt-2 text-xs text-slate-400">{c.detail}</p></div>)}</div><section className="rounded-2xl border bg-white p-6"><h2 className="text-xl font-bold">Actividad financiera ilustrativa</h2><p className="mt-1 text-sm text-slate-500">Ejemplo de recaudación mensual, expresada en soles</p><div className="mt-7 grid grid-cols-6 items-end gap-3" style={{height:180}}>{[48,65,55,78,72,93].map((v,i)=><div key={i} className="flex h-full flex-col justify-end gap-2"><div className="rounded-t-lg bg-sky-700" style={{height:v+'%'}}/><span className="text-center text-xs text-slate-500">{['May','Jun','Jul','Ago','Sep','Oct'][i]}</span></div>)}</div></section></>:null}
-    {section==='residentes'?<section className="rounded-2xl border bg-white p-6"><h2 className="text-xl font-bold">Gestión de residentes y unidades</h2><p className="mt-2 text-sm text-slate-500">Vista de ejemplo del inventario residencial.</p><div className="mt-5 grid gap-3 sm:grid-cols-3">{[['Unidades','128'],['Ocupadas','113'],['Disponibles','15']].map(x=><div key={x[0]} className="rounded-xl bg-sky-50 p-5"><p className="text-sm text-slate-600">{x[0]}</p><strong className="text-3xl text-sky-900">{x[1]}</strong></div>)}</div><p className="mt-5 rounded-lg border border-dashed p-4 text-sm text-slate-500">La aplicación real permite gestionar fichas, residentes y propiedades. Esta vista pública es demostrativa y no guarda información.</p></section>:null}
-    {section==='finanzas'?<section className="rounded-2xl border bg-white p-6"><h2 className="text-xl font-bold">Resumen financiero</h2><p className="mt-2 text-sm text-slate-500">Ejemplo de indicadores de recibos y pagos.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{[['Recibos emitidos','128'],['Pagos validados','94'],['Pendientes','18'],['Vencidos','7']].map(x=><div key={x[0]} className="rounded-xl bg-sky-50 p-5"><p className="text-sm text-slate-600">{x[0]}</p><strong className="text-3xl text-sky-900">{x[1]}</strong></div>)}</div><p className="mt-5 text-xs text-slate-500">Cifras ilustrativas; no muestran saldos ni transacciones reales.</p></section>:null}
-    {section==='operaciones'?<section className="rounded-2xl border bg-white p-6"><h2 className="text-xl font-bold">Centro de operaciones</h2><p className="mt-2 text-sm text-slate-500">Organiza mantenimiento, incidencias y actividades.</p><div className="mt-5 space-y-3">{[['Revisión de bombas','Programada'],['Inspección de áreas comunes','En curso'],['Solicitud de mantenimiento','Pendiente']].map(x=><div key={x[0]} className="flex justify-between gap-4 rounded-xl border p-4 text-sm"><span className="font-semibold">{x[0]}</span><span className="text-sky-700">{x[1]}</span></div>)}</div><p className="mt-4 text-xs text-slate-500">Tareas demostrativas. No generan tickets ni cambios en la base de datos.</p></section>:null}
-    </div>
+ const [seccion,setSeccion]=useState<Seccion>('dashboard')
+ const [menu,setMenu]=useState(false)
+ const [soloPendientes,setSoloPendientes]=useState(false)
+ const titulo=grupos.flatMap(grupo=>[...grupo.items]).find(([id])=>id===seccion)?.[1]
+ const ejemplo=seccion==='dashboard'?null:ejemplos[seccion]
+ const filas=seccion==='finanzas'&&soloPendientes?ejemplo?.filas.filter(fila=>fila[2]!=='Aviso registrado'):ejemplo?.filas
+ function navegar(id:Seccion){
+  setSeccion(id)
+  setMenu(false)
+  document.getElementById('contenido-demo')?.focus()
+ }
+
+ return <div className="min-h-screen bg-[#f0f4f9] text-slate-800">
+  <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 sm:px-6">
+   <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+    <button type="button" aria-label={menu?'Cerrar módulos':'Abrir módulos'} aria-expanded={menu} aria-controls="modulos-demo" onClick={()=>setMenu(!menu)} className="rounded-lg border border-slate-200 p-2 md:hidden">{menu?<X size={18}/>:<Menu size={18}/>}</button>
+    <Link href="/" className="flex items-center gap-2 whitespace-nowrap text-sm font-extrabold text-[#0a3154]"><span className="grid size-8 place-items-center rounded-lg bg-[#0a4879] text-white"><Building2 size={18} aria-hidden="true"/></span>Condomin-Pro</Link>
    </div>
-   <aside aria-label="Solicitar una demostración" className="flex flex-col gap-4 rounded-2xl border border-sky-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-    <div><p className="text-sm font-bold text-sky-800">¿Te interesa este módulo?</p><p className="mt-1 text-sm text-slate-600">{section==='residentes'?'Conoce cómo organizar residentes, propietarios y unidades en tu comunidad.':section==='finanzas'?'Consulta cómo administrar recibos y pagos reportados de tu condominio.':section==='operaciones'?'Conoce cómo dar seguimiento a incidencias y mantenimiento.':'Descubre cómo adaptar Condomin-Pro a la operación de tu edificio o condominio.'}</p></div>
-    <Link href="/#contacto" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#1f4b7a] px-5 py-3 text-sm font-bold text-white hover:bg-[#173c65]">Solicitar información <ArrowRight size={17}/></Link>
+   <Link href="/#contacto" className="rounded-xl bg-[#1f4b7a] px-3 py-2 text-xs font-bold text-white sm:px-4 sm:text-sm"><span className="sm:hidden">Solicitar demo</span><span className="hidden sm:inline">Solicitar demo guiada</span></Link>
+  </header>
+  <div className="flex">
+   <aside id="modulos-demo" className={`${menu?'block':'hidden'} fixed bottom-0 left-0 top-16 z-20 w-60 overflow-y-auto border-r border-slate-200 bg-white md:sticky md:block md:h-[calc(100dvh-4rem)] md:shrink-0`}>
+    <p className="bg-gradient-to-r from-[#092c50] to-[#17618d] px-5 py-5 text-xs font-bold uppercase tracking-widest text-white">Panel de gestión</p>
+    <nav aria-label="Módulos de la demo" className="space-y-4 px-3 py-4">
+     {grupos.map(grupo=><section key={grupo.titulo}>
+      <p className="px-3 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500">{grupo.titulo}</p>
+      {grupo.items.map(([id,label,Icon])=><button key={id} type="button" aria-current={seccion===id?'page':undefined} onClick={()=>navegar(id)} className={`mb-0.5 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm ${seccion===id?'bg-gradient-to-r from-[#0a4879] to-[#1176a3] font-semibold text-white':'text-slate-700 hover:bg-sky-50'}`}><Icon size={17} aria-hidden="true"/>{label}</button>)}
+     </section>)}
+    </nav>
    </aside>
-   <section className="flex flex-wrap items-center justify-between gap-5 rounded-2xl bg-[#102d50] p-7 text-white"><div><h2 className="text-2xl font-bold">¿Quieres verlo aplicado a tu condominio?</h2><p className="mt-2 text-sm text-blue-100">Solicita una demostración personalizada y conoce los módulos disponibles.</p></div><Link href="/#contacto" className="inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-5 py-3 font-extrabold text-[#102d50]">Contactar al equipo <ArrowRight size={18}/></Link></section>
+   {menu&&<button type="button" aria-label="Cerrar menú de módulos" onClick={()=>setMenu(false)} className="fixed inset-x-0 bottom-0 top-16 z-10 bg-slate-950/35 md:hidden"/>}
+   <main id="contenido-demo" tabIndex={-1} className="min-w-0 flex-1 scroll-mt-20 p-4 outline-none md:p-7 xl:p-9">
+    <div className="mx-auto max-w-7xl space-y-5">
+     <header className="rounded-[24px] bg-gradient-to-r from-[#0b2446] via-[#123d70] to-[#087c9e] px-5 py-6 text-white shadow-sm sm:px-8 sm:py-8">
+      <p className="text-xs font-bold uppercase tracking-widest text-cyan-200">Demo pública sin registro</p>
+      <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{seccion==='dashboard'?'Dashboard ejecutivo':titulo}</h1>
+      <p className="mt-2 text-sm text-blue-100">Residencial Los Olivos · Datos ficticios</p>
+     </header>
+     {seccion==='dashboard'&&<>
+      <section aria-labelledby="recorrido-demo" className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+       <h2 id="recorrido-demo" className="font-bold">Explora la gestión del edificio</h2>
+       <div className="mt-3 grid gap-2 sm:grid-cols-3">
+        {([['inmuebles','Ver inmuebles',House],['finanzas','Revisar cobranzas',Wallet],['reportes','Consultar reportes',ChartColumn]] as const).map(([id,label,Icon])=><button key={id} type="button" onClick={()=>navegar(id)} className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-left text-sm font-semibold hover:bg-sky-50"><Icon size={17} className="shrink-0 text-sky-700" aria-hidden="true"/>{label}<ArrowRight size={15} className="ml-auto shrink-0 text-slate-500" aria-hidden="true"/></button>)}
+       </div>
+      </section>
+      <dl className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+       {resumen.map(([label,valor,detalle])=><div key={label} className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-5"><dt className="text-sm text-slate-600">{label}</dt><dd className="mt-2 text-3xl font-extrabold text-[#173c65]">{valor}</dd><dd className="mt-1 text-xs text-slate-600">{detalle}</dd></div>)}
+      </dl>
+      <section aria-labelledby="recaudacion-demo" className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
+       <h2 id="recaudacion-demo" className="text-lg font-bold">Recaudación mensual</h2>
+       <ul className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-6">
+        {recaudacion.map(([mes,valor])=><li key={mes} className="text-center text-xs">
+         <div className="flex h-24 items-end rounded-t-lg bg-slate-50 sm:h-36" aria-hidden="true"><div className="w-full rounded-t-lg bg-sky-700" style={{height:(valor/100)+'%'}}/></div>
+         <p className="mt-2 font-bold">{soles.format(valor)}</p><p className="text-slate-600">{mes}</p>
+        </li>)}
+       </ul>
+      </section>
+     </>}
+     {ejemplo&&<section aria-label={'Registros de '+titulo} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+      {seccion==='finanzas'&&<div className="flex flex-wrap items-center justify-between gap-3 p-4">
+       <h2 className="font-bold">Cartera vencida</h2>
+       <button type="button" aria-pressed={soloPendientes} onClick={()=>setSoloPendientes(!soloPendientes)} className={`rounded-lg border px-3 py-2 text-sm font-semibold ${soloPendientes?'border-sky-800 bg-sky-800 text-white':'border-sky-200 text-sky-900'}`}>Por contactar hoy</button>
+      </div>}
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={'Tabla de '+titulo}>
+       <table className="w-full text-left text-sm"><thead className="bg-slate-50 text-slate-700"><tr>{ejemplo.columnas.map(columna=><th key={columna} scope="col" className="whitespace-nowrap px-4 py-3">{columna}</th>)}</tr></thead>
+        <tbody className="divide-y divide-slate-100">{filas?.map(fila=><tr key={fila[0]}>{fila.map((valor,i)=>i===0?<th key={i} scope="row" className="px-4 py-4 font-semibold text-slate-900">{valor}</th>:<td key={i} className="px-4 py-4 text-slate-600">{valor}</td>)}</tr>)}</tbody>
+       </table>
+      </div>
+     </section>}
+    </div>
+   </main>
   </div>
- </main>
+ </div>
 }
