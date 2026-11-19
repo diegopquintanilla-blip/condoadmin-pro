@@ -1,5 +1,5 @@
 'use client'
-import {useEffect,useState,type FormEvent} from 'react'
+import {useState,type FormEvent} from 'react'
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 import {supabase} from '@/lib/supabase/client'
@@ -13,20 +13,6 @@ export default function LoginPage(){
  const [register,setRegister]=useState(false)
  const [notice,setNotice]=useState('')
  const [awaitingConfirmation,setAwaitingConfirmation]=useState(false)
-
- useEffect(()=>{
-  const vieneDeConfirmacion=new URLSearchParams(window.location.search).has('code')
-  let mounted=true
-  supabase.auth.getUser().then(({data:{user},error})=>{
-   if(!mounted)return
-   if(error||!user?.email_confirmed_at){
-    if(vieneDeConfirmacion)setNotice('Si su correo ya fue confirmado, inicie sesión con su cuenta.')
-    return
-   }
-   router.replace(vieneDeConfirmacion?'/dashboard?activacion=confirmada':'/dashboard')
-  }).catch(()=>{if(mounted&&vieneDeConfirmacion)setNotice('Si su correo ya fue confirmado, inicie sesión con su cuenta.')})
-  return ()=>{mounted=false}
- },[router])
 
  function changeMode(next:boolean){
   setRegister(next)
@@ -53,12 +39,19 @@ export default function LoginPage(){
      setError(error.status===429?'Se alcanzó el límite temporal de solicitudes. Inténtalo más tarde.':'No pudimos completar el registro. Revisa los datos o inténtalo más tarde.')
      return
     }
-    if(!data.session){
+    if(data.session){
+     const {error:logoutError}=await supabase.auth.signOut({scope:'local'})
+     if(logoutError){setError('No pudimos cerrar la sesión del registro. Inténtalo de nuevo.');return}
+     router.replace('/login?registro=listo')
+     setRegister(false)
      setPassword('')
-     setAwaitingConfirmation(true)
-     setNotice('Revisa tu correo y confirma la cuenta. Luego vuelve a iniciar sesión. Si ya tenías una cuenta, puedes ingresar directamente.')
+     setNotice('Su cuenta ha sido creada. Inicie sesión con su correo y contraseña.')
      return
     }
+    setPassword('')
+    setAwaitingConfirmation(true)
+    setNotice('Solicitud de registro recibida. Revise su correo para confirmar su cuenta y luego inicie sesión.')
+    return
    }else{
     const {error}=await supabase.auth.signInWithPassword({email:address,password})
     if(error){setError(error.code==='email_not_confirmed'?'Confirma tu correo antes de ingresar.':'No se pudo iniciar sesión. Verifica tus credenciales.');return}
