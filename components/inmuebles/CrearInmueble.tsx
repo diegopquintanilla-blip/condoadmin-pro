@@ -6,10 +6,10 @@ import {AvisoCupo} from '@/components/planes/AvisoCupo'
 import {Plus,Loader2} from 'lucide-react'
 type Role={condominio_id:string;role:string;nombre:string;cupo?:{usadas:number;limite:number}}
 const tipos=['lote','casa','departamento','local','estacionamiento','deposito']
-export function CrearInmueble({memberships}:{memberships:Role[]}){
+export function CrearInmueble({memberships,condominioInicial}:{memberships:Role[];condominioInicial?:string}){
  const router=useRouter()
  const allowed=memberships.filter(x=>['admin','super_admin','junta'].includes(x.role))
- const [condominio,setCondominio]=useState(allowed[0]?.condominio_id??'')
+ const [condominio,setCondominio]=useState(allowed.find(x=>x.condominio_id===condominioInicial)?.condominio_id??allowed[0]?.condominio_id??'')
  const [codigo,setCodigo]=useState('')
  const [tipo,setTipo]=useState('lote')
  const [bloque,setBloque]=useState('')
