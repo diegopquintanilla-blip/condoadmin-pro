@@ -1,387 +1,129 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  alternates: { canonical: '/' },
-}
-
-import {ProspectForm} from '@/components/marketing/ProspectForm'
+import type {Metadata} from 'next'
 import Link from 'next/link'
-import {
-  ArrowRight,
-  Building2,
-  CalendarCheck,
-  CheckCircle2,
-  ClipboardList,
-  FileText,
-  LockKeyhole,
-  Mail,
-  MessageSquareWarning,
-  Phone,
-  ShieldCheck,
-  Users,
-  WalletCards,
-} from 'lucide-react'
+import {ArrowRight, Building2, CalendarCheck, ClipboardList, Mail, Play, ReceiptText, ShieldCheck, Users, WalletCards} from 'lucide-react'
+import {CobranzaPreview} from '@/components/marketing/CobranzaPreview'
+import {ProspectForm} from '@/components/marketing/ProspectForm'
 
-const softwareStructuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'CondominPro',
-  url: 'https://condominpro.com',
-  description: 'Plataforma web para la gestión administrativa de edificios y condominios en Perú: residentes, inmuebles, recibos, incidencias y comunicados.',
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web',
-  inLanguage: 'es-PE',
-  featureList: [
-    'Gestión de residentes e inmuebles',
-    'Registro y seguimiento de recibos y pagos reportados',
-    'Gestión administrativa de incidencias',
-    'Comunicados y documentación',
-  ],
-} as const
+const description='Administra edificios y condominios en Perú con CondominPro. Revisa recibos y pagos de mantenimiento, organiza unidades y prueba la demo sin registro.'
 
-export default function HomePage() {
-  return (
-    <main className="min-h-screen bg-[#f5f8fb] text-[#152033]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(softwareStructuredData).replace(/</g, '\\u003c'),
-        }}
-      />
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <Link href="/" className="flex min-w-0 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#1f4b7a] text-white shadow-sm sm:h-12 sm:w-12">
-              <Building2 className="h-7 w-7" />
-            </div>
-
-            <div>
-              <p className="text-lg font-bold leading-tight text-slate-900">
-                Condomin-Pro
-              </p>
-              <p className="hidden text-sm text-slate-500 sm:block">
-                Gestión inteligente de condominios
-              </p>
-            </div>
-          </Link>
-
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
-            <a href="#beneficios" className="transition hover:text-[#1f4b7a]">
-              Beneficios
-            </a>
-            <a href="#modulos" className="transition hover:text-[#1f4b7a]">
-              Módulos
-            </a>
-            <Link href="/demo" className="transition hover:text-[#1f4b7a]">Ver demo</Link>
-            <a href="#contacto" className="transition hover:text-[#1f4b7a]">
-              Contacto
-            </a>
-          </nav>
-
-          <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto sm:gap-3">
-            <Link
-              href="/login"
-              className="inline-flex rounded-xl px-2 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 sm:px-4 sm:text-sm"
-              aria-label="Iniciar sesión de cliente"
-            >
-              <span className="sm:hidden">Ingresar</span>
-              <span className="hidden sm:inline">Acceso a clientes</span>
-            </Link>
-
-            <Link
-              href="/demo"
-              className="rounded-xl bg-[#1f4b7a] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#173a60] sm:px-4 sm:text-sm"
-            >
-              Probar demo gratis
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <section className="relative isolate overflow-hidden bg-[#071a32] text-white">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_5%,rgba(24,156,191,.28),transparent_52%),radial-gradient(ellipse_at_2%_75%,rgba(28,87,162,.25),transparent_55%)]" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)] [background-size:52px_52px]" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:py-24">
-          <div>
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-200/10 px-4 py-2 text-xs font-bold uppercase tracking-[.13em] text-cyan-200">
-              <ShieldCheck className="h-4 w-4" /> Tecnología para comunidades mejor gestionadas
-            </div>
-            <h1 className="max-w-2xl text-4xl font-extrabold leading-[1.13] tracking-tight sm:text-5xl lg:text-[3.65rem]">
-              Toda la gestión de tu condominio. <span className="text-cyan-300">En un solo lugar.</span>
-            </h1>
-            <p className="mt-7 max-w-xl text-base leading-8 text-slate-300 sm:text-lg">
-              Centraliza inmuebles, residentes, recibos, incidencias y comunicados. Una experiencia más ordenada para administradoras, juntas directivas y comunidades residenciales.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/demo" className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-3.5 text-sm font-extrabold text-[#071a32] shadow-lg shadow-cyan-950/20 transition hover:bg-cyan-300">
-                Explorar demo sin registro <ArrowRight className="h-4 w-4"/>
-              </Link>
-              <Link href="/login" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/20">
-                Acceso a clientes
-              </Link>
-            </div>
-            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/15 pt-6 text-sm text-slate-300">
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-300"/> Gestión por condominio</span>
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-300"/> Accesos por roles</span>
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-cyan-300"/> Información centralizada</span>
-            </div>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-cyan-300/10 blur-3xl" aria-hidden="true"/>
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-[#102943] shadow-2xl shadow-black/40">
-              <div className="relative h-44 sm:h-56">
-                <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:"linear-gradient(180deg,rgba(5,21,43,.05),rgba(5,21,43,.75)),url('https://unsplash.com/photos/TJsf1pMigZM/download?force=true&w=1800')"}} role="img" aria-label="Edificio residencial moderno"/>
-                <div className="absolute bottom-5 left-6 right-6"><p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">Condomin-Pro</p><p className="mt-1 text-2xl font-extrabold">Tu operación, más clara.</p></div>
-              </div>
-              <div className="border-t border-white/10 bg-[#0c233e] p-5 sm:p-6">
-                <div className="flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Vista de funcionalidades</p><p className="mt-1 text-lg font-bold">Control administrativo integral</p></div><Building2 className="h-8 w-8 text-cyan-300"/></div>
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><WalletCards className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Finanzas</p><p className="mt-1 text-xs text-slate-300">Recibos y pagos reportados</p></div>
-                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><Users className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Residentes</p><p className="mt-1 text-xs text-slate-300">Unidades y propietarios</p></div>
-                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><ClipboardList className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Operación</p><p className="mt-1 text-xs text-slate-300">Mantenimiento y gestión</p></div>
-                  <div className="rounded-xl border border-white/10 bg-white/[.06] p-4"><Mail className="h-6 w-6 text-cyan-300"/><p className="mt-3 text-sm font-bold">Comunicación</p><p className="mt-1 text-xs text-slate-300">Boletines y comunicados</p></div>
-                </div>
-                <p className="mt-4 text-[11px] text-slate-400">Vista ilustrativa de los módulos · sin datos simulados de clientes</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="beneficios" className="border-y border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="max-w-3xl">
-            <p className="text-sm font-bold uppercase tracking-wide text-[#1f4b7a]">
-              Beneficios
-            </p>
-
-            <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-950">
-              Una plataforma pensada para administradoras, juntas directivas y
-              propietarios
-            </h2>
-
-            <p className="mt-4 text-lg leading-8 text-slate-600">
-              Reduce procesos manuales, mejora la comunicación y permite tener
-              una visión clara de la operación del condominio.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            <BenefitCard
-              icon={WalletCards}
-              title="Control financiero"
-              description="Gestiona recibos, pagos reportados y su validación administrativa."
-            />
-
-            <BenefitCard
-              icon={Users}
-              title="Gestión de residentes"
-              description="Administra propietarios, inquilinos, familiares autorizados y lotes."
-            />
-
-            <BenefitCard
-              icon={LockKeyhole}
-              title="Control de acceso"
-              description="Control de visitantes y autorizaciones, previsto para próximas fases."
-            />
-
-            <BenefitCard
-              icon={MessageSquareWarning}
-              title="Incidencias y reclamos"
-              description="Centraliza solicitudes, reclamos, mantenimiento y comunicación formal."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section id="modulos" className="mx-auto max-w-7xl px-6 py-20">
-        <div className="max-w-3xl">
-          <p className="text-sm font-bold uppercase tracking-wide text-[#1f4b7a]">
-            Módulos
-          </p>
-
-          <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-950">
-            Estructura modular para crecer por etapas
-          </h2>
-
-          <p className="mt-4 text-lg leading-8 text-slate-600">
-            Activa los módulos según el tipo de condominio, asociación,
-            residencial o conjunto habitacional que administres.
-          </p>
-        </div>
-
-        <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          <ModuleCard
-            icon={Building2}
-            title="Condominios, lotes e inmuebles"
-            description="Registro de condominios, unidades inmobiliarias, casas, lotes, estacionamientos y depósitos."
-          />
-
-          <ModuleCard
-            icon={WalletCards}
-            title="Finanzas y cobranzas"
-            description="Recibos de mantenimiento, pagos reportados y conciliación de información."
-          />
-
-          <ModuleCard
-            icon={CalendarCheck}
-            title="Reservas de áreas comunes"
-            description="Reservas de espacios compartidos, previstas para futuras fases."
-          />
-
-          <ModuleCard
-            icon={LockKeyhole}
-            title="Control de acceso"
-            description="Visitantes, proveedores, delivery, seguridad, autorización por lote y registro de ingreso."
-          />
-
-          <ModuleCard
-            icon={ClipboardList}
-            title="Mantenimiento"
-            description="Proveedores, equipos, cronogramas, cotizaciones y mantenimiento preventivo."
-          />
-
-          <ModuleCard
-            icon={FileText}
-            title="Documentos y comunicación"
-            description="Comunicados, documentos, cartas, reportes, incidencias y atención administrativa."
-          />
-        </div>
-      </section>
-
-      <section aria-labelledby="soluciones-heading" className="border-t border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <h2 id="soluciones-heading" className="text-3xl font-extrabold text-slate-950">Soluciones para cada comunidad</h2>
-          <p className="mt-3 max-w-2xl text-slate-600">Conoce cómo organizar la gestión administrativa según el tipo de inmueble que administras.</p>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <Link href="/software-administracion-condominios" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:border-[#1f4b7a] hover:shadow-md">
-              <h3 className="text-xl font-bold text-[#1f4b7a]">Software para administración de condominios</h3>
-              <p className="mt-3 text-slate-600">Organiza residentes, inmuebles, recibos, incidencias y comunicación.</p>
-              <span className="mt-5 inline-flex items-center gap-2 font-semibold text-[#1f4b7a]">Conocer la solución <ArrowRight className="h-4 w-4"/></span>
-            </Link>
-            <Link href="/gestion-edificios-residenciales" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 transition hover:border-[#1f4b7a] hover:shadow-md">
-              <h3 className="text-xl font-bold text-[#1f4b7a]">Gestión de edificios residenciales</h3>
-              <p className="mt-3 text-slate-600">Unidades, residentes, mantenimiento y seguimiento administrativo.</p>
-              <span className="mt-5 inline-flex items-center gap-2 font-semibold text-[#1f4b7a]">Conocer la solución <ArrowRight className="h-4 w-4"/></span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section id="contacto" className="mx-auto max-w-7xl px-6 py-20">
-        <div className="rounded-[2rem] bg-[#1f4b7a] p-8 text-white shadow-2xl shadow-slate-300/40 lg:p-12">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
-            <div>
-              <h2 className="text-4xl font-extrabold tracking-tight">
-                Lleva la administración de tu condominio a una plataforma
-                moderna
-              </h2>
-
-              <p className="mt-4 max-w-2xl text-lg leading-8 text-white/80">
-                Condomin-Pro está preparado para adaptarse a condominios de
-                playa, edificios residenciales, asociaciones de propietarios y
-                administradoras.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-white p-6 text-slate-900">
-              <h3 className="text-xl font-bold">Solicita información</h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Podemos configurar los módulos según la operación real de tu
-                condominio.
-              </p>
-
-              <ProspectForm/>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-6 py-8 text-sm text-slate-500 md:flex-row">
-          <p>© {new Date().getFullYear()} Condomin-Pro.</p>
-          <p>Plataforma de gestión y administración de condominios.</p>
-        </div>
-      </footer>
-    </main>
-  )
-}
-
-function VisualTag({
-  icon: Icon,
-  label,
-}: {
-  icon: React.ElementType
-  label: string
-}) {
-  return (
-    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1f4b7a]/10 text-[#1f4b7a]">
-        <Icon className="h-5 w-5" />
-      </div>
-
-      <span className="text-sm font-bold text-slate-800">{label}</span>
-    </div>
-  )
-}
-
-function BenefitCard({
-  icon: Icon,
-  title,
+export const metadata:Metadata={
   description,
-}: {
-  icon: React.ElementType
-  title: string
-  description: string
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-[#f8fbfd] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1f4b7a]/10 text-[#1f4b7a]">
-        <Icon className="h-6 w-6" />
-      </div>
-
-      <h3 className="text-lg font-bold text-slate-950">{title}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-600">{description}</p>
-    </div>
-  )
+  alternates:{canonical:'/'},
 }
 
-function ModuleCard({
-  icon: Icon,
-  title,
+const softwareStructuredData={
+  '@context':'https://schema.org',
+  '@type':'SoftwareApplication',
+  name:'CondominPro',
+  url:'https://condominpro.com',
   description,
-}: {
-  icon: React.ElementType
-  title: string
-  description: string
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-[#1f4b7a]/30 hover:shadow-md">
-      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1f4b7a]/10 text-[#1f4b7a]">
-        <Icon className="h-6 w-6" />
-      </div>
-
-      <h3 className="text-lg font-bold text-slate-950">{title}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-600">{description}</p>
-    </div>
-  )
+  applicationCategory:'BusinessApplication',
+  operatingSystem:'Web',
+  inLanguage:'es-PE',
 }
 
-function ContactRow({
-  icon: Icon,
-  label,
-}: {
-  icon: React.ElementType
-  label: string
-}) {
-  return (
-    <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1f4b7a]/10 text-[#1f4b7a]">
-        <Icon className="h-5 w-5" />
-      </div>
+const pasos=[
+  {Icon:ReceiptText,titulo:'Emite recibos por unidad',detalle:'Registra las cuotas de mantenimiento con su periodo e importe.'},
+  {Icon:ShieldCheck,titulo:'Revisa los pagos reportados',detalle:'Consulta el importe y la referencia antes de validar cada operación.'},
+  {Icon:WalletCards,titulo:'Consulta lo que queda por cobrar',detalle:'Revisa el saldo de cada recibo después de descontar los pagos validados.'},
+]
 
-      <span className="text-sm font-semibold text-slate-700">{label}</span>
-    </div>
-  )
+const operacion=[
+  {Icon:Users,titulo:'Residentes y unidades',detalle:'Consulta propietarios, residentes, estacionamientos y depósitos.'},
+  {Icon:CalendarCheck,titulo:'Mantenimiento',detalle:'Organiza las actividades del condominio y da seguimiento a sus tareas.'},
+  {Icon:Mail,titulo:'Comunicados',detalle:'Reúne los avisos de la administración en un solo lugar.'},
+]
+
+export default function HomePage(){
+  return <main className="min-h-screen bg-[#f8f6fd] text-[#231a39]">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(softwareStructuredData).replace(/</g,'\\u003c')}}/>
+    <header className="sticky top-0 z-40 border-b border-[#e7e1f2] bg-[#f8f6fd]/95 backdrop-blur">
+      <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="inline-flex items-center gap-2 whitespace-nowrap text-base font-extrabold tracking-tight sm:text-xl">
+          <span className="grid size-8 place-items-center rounded-lg bg-[#2d2050] text-[#dcccff] sm:size-9"><Building2 size={19} aria-hidden="true"/></span>
+          CondominPro
+        </Link>
+        <nav aria-label="Navegación principal" className="hidden items-center gap-7 text-sm font-semibold text-[#55466c] lg:flex">
+          <a href="#beneficios" className="hover:text-[#5939c6]">Cobranzas</a>
+          <a href="#modulos" className="hover:text-[#5939c6]">Operación</a>
+          <Link href="/demo" className="hover:text-[#5939c6]">Demo</Link>
+        </nav>
+        <div className="flex items-center gap-2 text-xs font-semibold sm:gap-4 sm:text-sm">
+          <Link href="/login" className="rounded-lg px-2 py-2 hover:bg-[#eee9f8]">Ingresar</Link>
+          <a href="#contacto" className="rounded-lg bg-[#5636bd] px-3 py-2.5 text-white hover:bg-[#492ba5] sm:px-4">Solicitar demo</a>
+        </div>
+      </div>
+    </header>
+
+    <section className="bg-[radial-gradient(ellipse_at_92%_12%,#e7ddff,transparent_56%),radial-gradient(ellipse_at_15%_95%,#efe7fe,transparent_42%)]">
+      <div className="mx-auto grid max-w-7xl items-center gap-9 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[.95fr_1.05fr] lg:gap-14 lg:py-20">
+        <div>
+          <p className="text-sm font-bold text-[#5636bd]">Software para edificios y condominios en Perú</p>
+          <h1 className="mt-4 max-w-xl text-[clamp(2.4rem,5.1vw,4.5rem)] font-extrabold leading-[1.05] tracking-[-.055em]">
+            Cierra la cobranza del mes <span className="text-[#5636bd]">con claridad</span>
+          </h1>
+          <p className="mt-5 max-w-lg text-base leading-7 text-[#55466c] sm:text-lg sm:leading-8">
+            Emite recibos, valida pagos de mantenimiento y revisa qué queda por cobrar. Organiza residentes, unidades e incidencias desde el mismo panel.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/demo" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#5636bd] px-5 py-3.5 text-sm font-bold text-white shadow-md shadow-violet-900/20 hover:bg-[#492ba5]"><Play size={16} aria-hidden="true"/> Probar demo sin registro</Link>
+            <a href="#contacto" className="inline-flex items-center gap-2 rounded-xl border border-[#c9bade] bg-white/70 px-5 py-3.5 text-sm font-bold hover:bg-white">Hablar con nosotros <ArrowRight size={16} aria-hidden="true"/></a>
+          </div>
+        </div>
+        <CobranzaPreview/>
+      </div>
+    </section>
+
+    <section id="beneficios" className="scroll-mt-20 border-y border-[#e7e1f2] bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-18">
+        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Del recibo al saldo pendiente</h2>
+        <div className="mt-7 grid gap-4 md:grid-cols-3">
+          {pasos.map(({Icon,titulo,detalle})=><article key={titulo} className="rounded-2xl border border-[#e7e1f2] bg-[#faf8ff] p-5 sm:p-6">
+            <Icon size={23} className="text-[#5636bd]" aria-hidden="true"/>
+            <h3 className="mt-4 text-lg font-bold">{titulo}</h3>
+            <p className="mt-2 text-sm leading-6 text-[#55466c]">{detalle}</p>
+          </article>)}
+        </div>
+      </div>
+    </section>
+
+    <section id="modulos" className="mx-auto max-w-7xl scroll-mt-20 px-5 py-14 sm:px-8 sm:py-18">
+      <div className="grid gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
+        <div>
+          <h2 className="max-w-md text-3xl font-extrabold tracking-tight sm:text-4xl">Organiza el día a día del condominio</h2>
+          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-[#5636bd]">
+            <Link href="/gestion-edificios-residenciales" className="underline underline-offset-4">Edificios residenciales</Link>
+            <Link href="/software-administracion-condominios" className="underline underline-offset-4">Administradoras y condominios</Link>
+          </div>
+        </div>
+        <div className="divide-y divide-[#e7e1f2] rounded-2xl border border-[#e7e1f2] bg-white px-5">
+          {operacion.map(({Icon,titulo,detalle})=><div key={titulo} className="flex items-start gap-3 py-4">
+            <Icon size={20} className="mt-0.5 shrink-0 text-[#5636bd]" aria-hidden="true"/>
+            <div><h3 className="font-bold">{titulo}</h3><p className="mt-1 text-sm leading-6 text-[#55466c]">{detalle}</p></div>
+          </div>)}
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" className="scroll-mt-20 bg-[#2d2050] text-white">
+      <div className="mx-auto grid max-w-7xl items-start gap-8 px-5 py-14 sm:px-8 sm:py-18 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <div>
+          <ClipboardList size={30} className="text-[#cebaff]" aria-hidden="true"/>
+          <h2 className="mt-4 max-w-lg text-3xl font-extrabold tracking-tight sm:text-4xl">Veamos cómo administras hoy tu condominio</h2>
+          <p className="mt-4 max-w-md leading-7 text-[#e4d9fa]">Cuéntanos cuántas unidades gestionas y cómo registras los pagos. En una demo guiada podemos recorrer el proceso que más tiempo te toma.</p>
+        </div>
+        <div className="min-w-0 rounded-2xl bg-white p-5 text-[#231a39] sm:p-7">
+          <h3 className="text-xl font-bold">Solicitar una demo guiada</h3>
+          <ProspectForm/>
+        </div>
+      </div>
+    </section>
+
+    <footer className="border-t border-[#e7e1f2] bg-white">
+      <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-4 px-5 py-6 text-sm text-[#55466c] sm:px-8">
+        <p>© {new Date().getFullYear()} CondominPro</p>
+        <div className="flex flex-wrap gap-4"><Link href="/demo" className="hover:underline">Demo pública</Link><Link href="/login" className="hover:underline">Acceso a clientes</Link></div>
+      </div>
+    </footer>
+  </main>
 }
