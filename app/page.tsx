@@ -298,7 +298,7 @@ export default function HomePage() {
 
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-6 py-8 text-sm text-slate-500 md:flex-row">
-          <p>© {new Date().getFullYear()} Condomin-Pro.</p>
+          <p>© {new Date().getFullYear()} Diego Marcelo Palomino Quintanilla. Todos los derechos reservados.</p>
           <p>Plataforma de gestión y administración de condominios.</p>
         </div>
       </footer>
