@@ -98,9 +98,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="relative isolate overflow-hidden bg-[#071a32] text-white">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_5%,rgba(24,156,191,.28),transparent_52%),radial-gradient(ellipse_at_2%_75%,rgba(28,87,162,.25),transparent_55%)]" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)] [background-size:52px_52px]" />
+      <section className="landing-hero relative isolate overflow-hidden text-white">
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:py-24">
           <div>
             <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-200/10 px-4 py-2 text-xs font-bold uppercase tracking-[.13em] text-cyan-200">
