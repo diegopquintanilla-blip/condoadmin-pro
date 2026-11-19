@@ -33,7 +33,7 @@ export default function LoginPage(){
    if(register){
     const {data,error}=await supabase.auth.signUp({
      email:address,password,
-     options:{data:{registration_type:'condominpro_demo'},emailRedirectTo:new URL('/login',window.location.origin).href},
+     options:{data:{registration_type:'condominpro_demo'},emailRedirectTo:new URL('/auth/confirmacion',window.location.origin).href},
     })
     if(error){
      setError(error.status===429?'Se alcanzó el límite temporal de solicitudes. Inténtalo más tarde.':'No pudimos completar el registro. Revisa los datos o inténtalo más tarde.')
