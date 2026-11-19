@@ -1,2 +1,19 @@
 @import "tailwindcss";
 body{margin:0;font-family:Arial,Helvetica,sans-serif}
+
+.landing-hero {
+  background-color: #081a30;
+  background-image:
+    radial-gradient(ellipse at 76% 35%, rgb(29 102 155 / 36%), transparent 54%),
+    radial-gradient(ellipse at 19% 65%, rgb(29 69 125 / 28%), transparent 52%),
+    linear-gradient(125deg, #09192d 0%, #0b203a 53%, #08192d 100%);
+}
+
+@media (max-width: 63.99rem) {
+  .landing-hero {
+    background-image:
+      radial-gradient(ellipse at 78% 69%, rgb(29 102 155 / 34%), transparent 55%),
+      radial-gradient(ellipse at 22% 16%, rgb(29 69 125 / 27%), transparent 46%),
+      linear-gradient(160deg, #09192d 0%, #0b203a 57%, #08192d 100%);
+  }
+}
