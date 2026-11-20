@@ -64,7 +64,10 @@ export default async function FinanzasPage({searchParams}:{searchParams:Promise<
     const style='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'
     return href?<Link key={name} className={style+' hover:border-sky-400'} href={href}>{content}</Link>:<div key={name} className={style}>{content}</div>
    })}</div>
-   <Link href={conciliacion} className="inline-block text-sm font-bold text-sky-800 underline">Ver conciliación del periodo</Link>
+   <div className="flex flex-wrap items-center gap-3">
+    {canEdit&&periodo<=mesActual&&<Link href={'/finanzas/cierre?'+scope} className="rounded-xl border border-sky-200 bg-white px-4 py-2 text-sm font-bold text-sky-900 hover:bg-sky-50">Ver cierre mensual</Link>}
+    <Link href={conciliacion} className="text-sm font-bold text-sky-800 underline">Ver conciliación del periodo</Link>
+   </div>
   </section>}
   {current&&canEdit&&(pendientes.error?<p id="validar-pagos" role="alert" className="rounded-xl bg-red-50 p-5 text-red-800">No se pudo cargar la bandeja de validación.</p>:<ValidarPagos key={current} condominioId={current} pagos={pendientes.data??[]} total={totals?.por_validar}/>)}
   {current&&!config.error?<FinanzasConfiguracion key={current} condominioId={current} initial={config.data} canEdit={canEdit}/>:null}
