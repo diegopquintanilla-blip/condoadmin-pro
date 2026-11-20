@@ -1,39 +1,100 @@
 'use client'
+
 import {useState,type FormEvent} from 'react'
 import {useRouter} from 'next/navigation'
+import {LoaderCircle,Pencil,Settings2} from 'lucide-react'
 import {supabase} from '@/lib/supabase/client'
-import {Settings2,LoaderCircle,Save} from 'lucide-react'
-type Settings={mantenimiento_base:number|null;mora_base:number|null;dia_corte:number|null;dia_vencimiento:number|null;permitir_pagos_adelantados:boolean;generar_recibos_auto:boolean}
+
+type Settings={
+ mantenimiento_base:number|null
+ mora_base:number|null
+ dia_corte:number|null
+ dia_vencimiento:number|null
+ permitir_pagos_adelantados:boolean
+}
+
+const campos='mantenimiento_base,mora_base,dia_corte,dia_vencimiento,permitir_pagos_adelantados'
+const moneda=new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN'})
+const importe=(n:number|null)=>n===null?'Sin definir':moneda.format(n)
+const inputStyle='mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2'
+
 export function FinanzasConfiguracion({condominioId,initial,canEdit}:{condominioId:string;initial:Settings|null;canEdit:boolean}){
  const router=useRouter()
- const [base,setBase]=useState(String(initial?.mantenimiento_base??0))
- const [mora,setMora]=useState(String(initial?.mora_base??0))
- const [corte,setCorte]=useState(String(initial?.dia_corte??1))
- const [vence,setVence]=useState(String(initial?.dia_vencimiento??15))
- const [adelantos,setAdelantos]=useState(initial?.permitir_pagos_adelantados??true)
+ const [vigente,setVigente]=useState(initial)
+ const [editing,setEditing]=useState(false)
  const [busy,setBusy]=useState(false)
  const [notice,setNotice]=useState('')
- if(!canEdit)return null
- async function submit(e:FormEvent<HTMLFormElement>){
-  e.preventDefault();setNotice('')
-  const amount=Number(base),late=Number(mora),day=Number(corte),due=Number(vence)
-  if(![amount,late,day,due].every(Number.isFinite)||amount<0||late<0||amount>1e9||late>1e9||![day,due].every(x=>Number.isInteger(x)&&x>=1&&x<=28)){setNotice('Verifica los importes y los días (1 a 28).');return}
+ const [error,setError]=useState('')
+
+ async function submit(event:FormEvent<HTMLFormElement>){
+  event.preventDefault()
+  if(busy||!canEdit)return
+  setError('')
+  setNotice('')
+  const form=new FormData(event.currentTarget)
+  const base=Number(form.get('mantenimiento'))
+  const mora=Number(form.get('mora'))
+  const corte=Number(form.get('corte'))
+  const vence=Number(form.get('vencimiento'))
+  if(![base,mora].every(n=>Number.isFinite(n)&&n>=0&&n<=1e9)||
+     ![corte,vence].every(n=>Number.isInteger(n)&&n>=1&&n<=28)){
+   setError('Verifica los importes y elige días del 1 al 28.')
+   return
+  }
+
   setBusy(true)
-  const payload={condominio_id:condominioId,mantenimiento_base:amount,mora_base:late,dia_corte:day,dia_vencimiento:due,permitir_pagos_adelantados:adelantos,generar_recibos_auto:false}
-  const {error}=await supabase.from('finanzas_config').upsert(payload,{onConflict:'condominio_id'})
-  setBusy(false)
-  if(error){setNotice('No fue posible guardar la configuración. Verifica los permisos administrativos.');return}
-  setNotice('Configuración guardada. No se han generado recibos ni cobros.');router.refresh()
+  try{
+   const {data,error}=await supabase.from('finanzas_config').upsert({
+    condominio_id:condominioId,
+    mantenimiento_base:base,
+    mora_base:mora,
+    dia_corte:corte,
+    dia_vencimiento:vence,
+    permitir_pagos_adelantados:form.get('adelantos')==='on',
+   },{onConflict:'condominio_id'}).select(campos).single()
+   if(error||!data){
+    setError(error?.message==='LIMITE_ACCIONES_ALCANZADO'?'Alcanzaste el cupo de acciones de tu plan.':'No se pudo guardar la configuración. Verifica tus permisos e inténtalo de nuevo.')
+    return
+   }
+   setVigente(data)
+   setEditing(false)
+   setNotice('Configuración guardada.')
+   router.refresh()
+  }catch{
+   setError('No se pudo confirmar el guardado. Actualiza la página antes de volver a intentar.')
+  }finally{setBusy(false)}
  }
- return <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-  <div className="mb-5 flex items-center gap-3"><Settings2 className="text-sky-700"/><div><h2 className="text-lg font-bold">Administrar parámetros de cobranza</h2><p className="text-sm text-slate-500">Valores de referencia; guardar no emite recibos ni procesa pagos.</p></div></div>
-  <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
-   <label className="text-sm font-semibold">Mantenimiento base (S/)<input required type="number" min="0" max="1000000000" step="0.01" value={base} onChange={e=>setBase(e.target.value)} className="mt-2 w-full rounded-xl border p-3"/></label>
-   <label className="text-sm font-semibold">Mora base (S/)<input required type="number" min="0" max="1000000000" step="0.01" value={mora} onChange={e=>setMora(e.target.value)} className="mt-2 w-full rounded-xl border p-3"/></label>
-   <label className="text-sm font-semibold">Día de corte<input required type="number" min="1" max="28" value={corte} onChange={e=>setCorte(e.target.value)} className="mt-2 w-full rounded-xl border p-3"/></label>
-   <label className="text-sm font-semibold">Día de vencimiento<input required type="number" min="1" max="28" value={vence} onChange={e=>setVence(e.target.value)} className="mt-2 w-full rounded-xl border p-3"/></label>
-   <label className="flex items-center gap-2 text-sm font-medium sm:col-span-2"><input type="checkbox" checked={adelantos} onChange={e=>setAdelantos(e.target.checked)}/> Permitir pagos adelantados</label>
-   <div className="flex flex-wrap items-center gap-3 sm:col-span-2"><button disabled={busy} className="inline-flex items-center gap-2 rounded-xl bg-sky-800 px-5 py-3 font-semibold text-white disabled:opacity-50">{busy?<LoaderCircle size={18} className="animate-spin"/>:<Save size={18}/>} Guardar configuración</button>{notice&&<p role="status" className="text-sm text-slate-700">{notice}</p>}</div>
-  </form>
+
+ return <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" aria-labelledby="config-cobranza">
+  <div className="flex flex-wrap items-start justify-between gap-3">
+   <div className="flex items-start gap-3"><Settings2 className="mt-1 shrink-0 text-sky-700" aria-hidden="true"/><div>
+    <h2 id="config-cobranza" className="text-lg font-bold">Configuración de cobranza</h2>
+    <p className="mt-1 text-sm text-slate-600">Cuota, mora y calendario de referencia para la gestión manual.</p>
+   </div></div>
+   {canEdit&&!editing&&<button type="button" onClick={()=>{setNotice('');setEditing(true)}} className="inline-flex items-center gap-2 rounded-lg border border-sky-200 px-3 py-2 text-sm font-semibold text-sky-900 hover:bg-sky-50"><Pencil size={16} aria-hidden="true"/>{vigente?'Editar configuración':'Configurar cobranza'}</button>}
+  </div>
+  {editing&&canEdit?<form onSubmit={submit} className="mt-5">
+   <fieldset disabled={busy} className="grid gap-4 sm:grid-cols-2">
+    <label className="text-sm font-semibold">Cuota de mantenimiento (S/)<input name="mantenimiento" required type="number" min="0" max="1000000000" step="0.01" defaultValue={vigente?.mantenimiento_base??0} className={inputStyle}/></label>
+    <label className="text-sm font-semibold">Mora de referencia (S/)<input name="mora" required type="number" min="0" max="1000000000" step="0.01" defaultValue={vigente?.mora_base??0} className={inputStyle}/></label>
+    <label className="text-sm font-semibold">Día de corte<input name="corte" required type="number" min="1" max="28" defaultValue={vigente?.dia_corte??1} className={inputStyle}/></label>
+    <label className="text-sm font-semibold">Día de vencimiento<input name="vencimiento" required type="number" min="1" max="28" defaultValue={vigente?.dia_vencimiento??15} className={inputStyle}/></label>
+    <label className="flex items-center gap-2 text-sm font-medium sm:col-span-2"><input name="adelantos" type="checkbox" defaultChecked={vigente?.permitir_pagos_adelantados??true}/> Permitir pagos adelantados</label>
+    <div className="flex flex-wrap items-center gap-2 sm:col-span-2">
+     <button className="inline-flex items-center gap-2 rounded-lg bg-sky-800 px-4 py-2 text-sm font-bold text-white">{busy&&<LoaderCircle size={16} className="animate-spin" aria-hidden="true"/>}{busy?'Guardando…':'Guardar cambios'}</button>
+     <button type="button" onClick={()=>{setError('');setEditing(false)}} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold">Cancelar</button>
+    </div>
+   </fieldset>
+   {error&&<p role="alert" className="mt-3 text-sm text-red-800">{error}</p>}
+  </form>:vigente?<dl className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-5">
+   {[
+    ['Cuota de mantenimiento',importe(vigente.mantenimiento_base)],
+    ['Mora de referencia',importe(vigente.mora_base)],
+    ['Día de corte',vigente.dia_corte??'Sin definir'],
+    ['Día de vencimiento',vigente.dia_vencimiento??'Sin definir'],
+    ['Pagos adelantados',vigente.permitir_pagos_adelantados?'Permitidos':'Deshabilitados'],
+   ].map(([nombre,valor])=><div key={nombre} className="min-w-0 rounded-xl bg-slate-50 p-3"><dt className="text-xs text-slate-600">{nombre}</dt><dd className="mt-1 text-sm font-bold text-slate-900">{valor}</dd></div>)}
+  </dl>:<p className="mt-4 text-sm text-slate-600">Este condominio aún no tiene una configuración guardada.</p>}
+  {notice&&<p role="status" className="mt-3 text-sm font-semibold text-emerald-800">{notice}</p>}
  </section>
 }
